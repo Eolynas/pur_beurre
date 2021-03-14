@@ -83,9 +83,10 @@ DATABASES = {
     'default': {
             'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
             'NAME': 'pur_beurre', # le nom de notre base de donnees creee precedemment
-            'USER': 'eddy', # attention : remplacez par votre nom d'utilisateur
-            'PASSWORD': os.environ.get("db_pswd"),
-            'HOST': '',
+            'USER': 'postgres', # attention : remplacez par votre nom d'utilisateur
+            # 'PASSWORD': os.environ.get("db_pswd"),
+            'PASSWORD': '0311',
+            'HOST': 'localhost',
             'PORT': '5432',
         }
 }
@@ -113,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'UTC'
 
