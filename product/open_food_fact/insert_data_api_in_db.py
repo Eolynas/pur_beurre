@@ -6,6 +6,8 @@ from product.models import Category, Product
 # import recover_data_api_open_food_fact
 from product.open_food_fact import recover_data_api_open_food_fact
 from product.config import config
+from product.models import bulk_insert_product_category
+from product.config.config import logger
 
 
 def main():
@@ -18,11 +20,15 @@ def main():
     list_categories = configparser['API_OFF']['list_categories'].split(",")
     recover_api = recover_data_api_open_food_fact.RecoverApi()
     for category in list_categories:
-        print("===================")
-        print(category)
-        print("===================")
+        # del space in list
+        category = category.strip()
+        logger.info("===================")
+        logger.info(f"Insertion pour la catégorie {category}")
+        logger.info("===================")
         list_product = recover_api.get_product(category=category)
-
+        # bulk insert product
+        if len(list_product) > 0:
+            bulk_insert_product_category(list_product=list_product)
 
 
 if __name__ == "__main__":

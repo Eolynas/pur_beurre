@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = 'Insert data from API Open Food Fact'
 
     def handle(self, *args, **kwargs):
-        recover_api = insert_data_api_in_db.main()
+        insert_data_api_in_db.main()
 
 
 
