@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Creative - Start Bootstrap Theme</title>
+        <title>{{ title }}</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="{% static 'product/img/favicon.ico' %}" />
         <!-- Font Awesome icons (free version)-->
@@ -20,9 +20,13 @@
         <link href="{% static 'product/css/styles.css' %}" rel="stylesheet" />
     </head>
     <body id="page-top">
+
+        {% block navbar %}{% include 'products/navbar.html' %}{% endblock navbar%}
+
+
         {% block content %}{% endblock %}
 
-        {% block footer %}{% endblock %}
+        {% block footer %}{% include 'products/footer.html' %}{% endblock footer%}
 
     </body>
 </html>
