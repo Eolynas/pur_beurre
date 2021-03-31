@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 from django.test import TestCase
 
-from product.models import bulk_insert_product_category
+from product.models import bulk_insert_product_category, Product
 from product.open_food_fact.recover_data_api_open_food_fact import RecoverApi
 
 
@@ -52,5 +52,26 @@ class TestProductApp(TestCase):
              'nutriscore_score': 9, 'categories_product': ['fr:Pizza reine']
              }
         ]
-        insert = bulk_insert_product_category(example_dict_product)
-        self.assertEqual(insert.status_code, 200)
+
+        bulk_insert_product_category(example_dict_product)
+
+        query = Product.objects.filter(name="Pizza 4 fromage").exists()
+
+        self.assertEqual(query, True)
+
+    def test_update_data_in_db(self):
+        """
+        test insert data (product & category) in db
+        """
+        example_dict_product = [
+            {'name': 'Pizza 4 fromage',
+             'stores': 'Carrefour',
+             'url': 'https://fr.openfoodfacts.org/produit/0001217',
+             'nutriscore_score': 11, 'categories_product': ['fr:Pizza aux 4 fromages']
+             }
+        ]
+        bulk_insert_product_category(example_dict_product)
+
+        query = Product.objects.get(name="Pizza 4 fromage")
+
+        self.assertEqual(query.stores, 'Carrefour')

@@ -28,28 +28,22 @@ class RecoverApi:
         try:
             page = 1
             list_list_product = []
-            query_2 = requests.get(f'https://fr.openfoodfacts.org/category/{category}.json?page={page}').json()
-            if query_2['count'] == 0:
-                logger.info(f"Aucune données dans l'API pour la catégory {category}")
-                return list_list_product
-            elif query_2['count'] < int(config['API_OFF']['max_product_by_category']):
-                number_product = query_2['count']
-            else:
-                number_product = int(config['API_OFF']['max_product_by_category'])
+            number_product = int(config['API_OFF']['max_product_by_category'])
             while len(list_list_product) <= number_product:
-                for product in query_2['products']:
+                query = requests.get(f'https://fr.openfoodfacts.org/category/{category}.json?page={page}').json()
+                if int(query['count']) == 0:
+                    logger.info(f"Aucune données dans l'API pour la catégory {category}")
+                    return list_list_product
+                elif int(query['count']) < int(config['API_OFF']['max_product_by_category']):
+                    number_product = int(query['count'])
+
+                for product in query['products']:
                     product_list = {}
                     product_list['name'] = product.get("product_name_fr").strip()
 
-                    if product.get("stores"):
-                        product_list['stores'] = product.get("stores").strip()
-                    else:
-                        product_list['stores'] = product.get("stores")
+                    product_list['stores'] = product.get("stores", '').strip()
 
-                    if product.get("url"):
-                        product_list['url'] = product.get("url").strip()
-                    else:
-                        product_list['url'] = product.get("url")
+                    product_list['url'] = product.get("url", '').strip()
 
                     product_list['nutriscore_score'] = product.get("nutriscore_score")
 

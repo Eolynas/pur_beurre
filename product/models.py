@@ -9,16 +9,12 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     stores = models.CharField(max_length=200, null=True)
     url = models.CharField(max_length=255, null=True)
     nutriscore = models.CharField(max_length=20, null=True)
     category = models.ManyToManyField(Category)
 
-
-# class ProductCategory(models.Model):
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 def delete_all_data_in_tables():
     Product.objects.all().delete()
@@ -36,24 +32,15 @@ def bulk_insert_product_category(list_product: list):
     number_product_insert = 0
     for product in list_product:
 
-
-        # Creation d'un produit
-        # prod = Product(
-        #     name=product['name'],
-        #     stores=product['stores'],
-        #     url=product['url'],
-        #     nutriscore=product['nutriscore_score'],
-        # )
-        # prod.save()
         product_obj, created = Product.objects.get_or_create(
             name=product['name'],
-            stores=product['stores'],
-            url=product['url'],
-            nutriscore=product['nutriscore_score']
         )
         if created:
             number_product_insert += 1
-
+        product_obj.stores = product['stores']
+        product_obj.url = product['url']
+        product_obj.nutriscore = product['nutriscore_score']
+        product_obj.save()
 
         # Creation des categories
         categories_obj = []
@@ -68,10 +55,4 @@ def bulk_insert_product_category(list_product: list):
             product_obj.category.add(obj)
 
     logger.info(f"il y a {number_product_insert} qui ont étaient inséré")
-        # Product.objects.bulk_create(object_product)
-        # product_obj.save()
-        # product_obj.category(categories_obj)
-
-    # Product.objects.bulk_create(object_product)
-    # Product.objects.set(obj_categories)
 
