@@ -10143,3 +10143,16 @@ header.masthead h1 {
 .text-white-75 {
   color: rgba(255, 255, 255, 0.75);
 }
+
+.search-product {
+  padding: 2rem 2.25rem !important;
+  font-size: 0.85rem!important;
+  font-weight: 700!important;
+}
+
+.btn-search-product {
+  background: rgba(244, 98, 58, 0.9) !important;
+  border: 1px rgba(244, 98, 58, 0.9);
+  color: white;
+  text-transform: uppercase;
+}
