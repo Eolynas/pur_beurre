@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+
 
 # Application definition
 
@@ -125,6 +128,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
 
 
 # Static files (CSS, JavaScript, Images)
