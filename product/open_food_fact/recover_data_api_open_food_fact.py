@@ -41,18 +41,22 @@ class RecoverApi:
                     product_list = {}
                     product_list['name'] = product.get("product_name_fr").strip()
 
+                    product_list['image_product'] = product.get("image_url")
+
                     product_list['stores'] = product.get("stores", '').strip()
 
                     product_list['url'] = product.get("url", '').strip()
 
-                    product_list['nutriscore_score'] = product.get("nutriscore_score")
+                    product_list['nutriscore'] = product.get("nutriscore_grade")
+
+                    product_list['image_reperes_nutrionnels'] = product.get("image_nutrition_url")
 
                     product_list['categories_product'] = product.get("categories", "").split(",")
 
                     list_list_product.append(product_list)
                 page += 1
 
-            return list_list_product
+            return list_list_product[:number_product]
 
         except AttributeError as e:
             logger.info("stop")

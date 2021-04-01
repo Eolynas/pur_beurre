@@ -1,5 +1,7 @@
 """ Models postgres"""
+from typing import Union
 from django.db import models
+
 from product.config.config import logger
 
 
@@ -10,9 +12,11 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    image_product = models.CharField(max_length=255, null=True)
     stores = models.CharField(max_length=200, null=True)
     url = models.CharField(max_length=255, null=True)
     nutriscore = models.CharField(max_length=20, null=True)
+    image_reperes_nutrionnels = models.CharField(max_length=255, null=True)
     category = models.ManyToManyField(Category)
 
 
@@ -30,6 +34,7 @@ def bulk_insert_product_category(list_product: list):
 
     logger.info(f"Il y a {len(list_product)} produit")
     number_product_insert = 0
+    number_product_update = 0
     for product in list_product:
 
         product_obj, created = Product.objects.get_or_create(
@@ -37,9 +42,18 @@ def bulk_insert_product_category(list_product: list):
         )
         if created:
             number_product_insert += 1
+        if not product_obj.image_product == product['image_product'] and \
+                not product_obj.stores == product['stores'] and \
+                not product_obj.url == product['url'] and \
+                not product_obj.nutriscore == product['nutriscore'] and \
+                not product_obj.image_reperes_nutrionnels == product['image_reperes_nutrionnels']:
+            number_product_update += 1
+
+        product_obj.image_product = product['image_product']
         product_obj.stores = product['stores']
         product_obj.url = product['url']
-        product_obj.nutriscore = product['nutriscore_score']
+        product_obj.nutriscore = product['nutriscore']
+        product_obj.image_reperes_nutrionnels = product['image_reperes_nutrionnels']
         product_obj.save()
 
         # Creation des categories
@@ -57,11 +71,26 @@ def bulk_insert_product_category(list_product: list):
     logger.info(f"il y a {number_product_insert} qui ont étaient inséré")
 
 
-def get_product():
+def get_id_product_by_name(product_name: str) -> Union[int, bool]:
     """
     get product with name
+    :param product_name: name product enter into search bar
+    :type product_name: str
     """
+    query = Product.objects.filter(name__icontains=product_name).values().first()
+
+    if query is None:
+        return query
+    if query['id']:
+        return query['id']
 
 
+def get_product_by_id(id_product: int) -> dict:
+    """
+    get product with id
+    :param id_product: id product
+    :type product_name: int
+    """
+    query = Product.objects.filter(pk=id_product).values().first()
 
-
+    return query

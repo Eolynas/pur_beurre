@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 from django.test import TestCase
 
-from product.models import bulk_insert_product_category, Product
+from product.models import bulk_insert_product_category, Product, get_id_product_by_name
 from product.open_food_fact.recover_data_api_open_food_fact import RecoverApi
 
 
@@ -96,8 +96,13 @@ class TestProductApp(TestCase):
         """
         pass
 
-        query = Product.objects.filter(name__icontains='pizza').values().first()
-        self.assertEqual(query['id'], 1)
+        # query = Product.objects.filter(name__icontains='pizza').values().first()
+        query = get_id_product_by_name('pizza')
+        self.assertEqual(query, 1)
 
-        query = Product.objects.filter(name__icontains='Pizza').values().first()
-        self.assertEqual(query['id'], 1)
+        # query = Product.objects.filter(name__icontains='Pizza').values().first()
+        query = get_id_product_by_name('Pizza')
+        self.assertEqual(query, 1)
+
+        query = get_id_product_by_name('sqdqsdqsdqsd')
+        self.assertEqual(query, None)
