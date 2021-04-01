@@ -10156,3 +10156,8 @@ header.masthead h1 {
   color: white;
   text-transform: uppercase;
 }
+
+.sidebar {
+  height: 50vh !important;
+  padding: 2.5rem;
+}

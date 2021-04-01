@@ -14,7 +14,7 @@ class Index(generic.TemplateView, generic.FormView):
     def post(self, request, *args, **kwars):
         form = self.form_class(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect('/product_result')
+            return HttpResponseRedirect(form, '/product_result')
 
     # def get_context_data(self, *args, **kwargs):
     #     context = super(AboutUs, self).get_context_data(*args, **kwargs)
@@ -33,3 +33,17 @@ class Legal(generic.TemplateView):
 
 class ProductResult(generic.TemplateView):
     template_name = 'products/product.html'
+    form_class = SearchProduct
+
+    def post(self, request, *args, **kwars):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+
+            # context = super(ProductResult, self).get_context_data(*args, **kwargs)
+            # context['name'] = form
+            return render(request, self.template_name, {'product': form.cleaned_data['product']})
+
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super(ProductResult, self).get_context_data(*args, **kwargs)
+    #     context['name'] = form
+    #     return context

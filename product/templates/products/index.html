@@ -20,7 +20,7 @@
                     {#                        <input type="submit" value="Submit">#}
                     {#                    </form>#}
 
-                    <form class="input-group mb-3" action="{% url 'index' %}" method="post">
+                    <form class="input-group mb-3" action="{% url 'product_result' %}" method="post">
                         {% csrf_token %}
                         <label for="product"></label><input type="text"
                                                             class="form-control search-product"

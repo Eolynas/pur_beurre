@@ -56,3 +56,12 @@ def bulk_insert_product_category(list_product: list):
 
     logger.info(f"il y a {number_product_insert} qui ont étaient inséré")
 
+
+def get_product():
+    """
+    get product with name
+    """
+
+
+
+
