@@ -10155,6 +10155,9 @@ header.masthead h1 {
   border: 1px rgba(244, 98, 58, 0.9);
   color: white;
   text-transform: uppercase;
+  border-radius: 0% 20% 20% 0%;
+  font-size: 0.85rem;
+
 }
 
 .sidebar {

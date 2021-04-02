@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 from django.test import TestCase
 
-from product.models import bulk_insert_product_category, Product, get_id_product_by_name
+from product.models import bulk_insert_product_category, Product, get_id_product_by_name, get_product_by_id
 from product.open_food_fact.recover_data_api_open_food_fact import RecoverApi
 
 
@@ -115,3 +115,25 @@ class TestProductApp(TestCase):
 
         query = get_id_product_by_name('sqdqsdqsdqsd')
         self.assertEqual(query, None)
+
+    def test_get_product_by_id(self):
+        """
+        test get product by id for the url '/products/<id_product>'
+        """
+
+        id_test_1 = 1
+        id_test_2 = 8682
+        id_test_3 = 'pizza'
+        id_test_4 = False
+        id_test_5 = None
+
+        # TODO: Peut-on tester avec un str ? car j'ai un typeError alors que l'except est géré
+
+        query_by_id = get_product_by_id(id_test_1)
+        self.assertEqual(query_by_id['name'], 'Pizza test')
+
+        query_by_id = get_product_by_id(id_test_2)
+        self.assertEqual(query_by_id['name'], None)
+
+
+

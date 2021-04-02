@@ -85,12 +85,16 @@ def get_id_product_by_name(product_name: str) -> Union[int, None]:
         return query['id']
 
 
-def get_product_by_id(id_product: int) -> dict:
+def get_product_by_id(id_product: int) -> Union[dict, None]:
     """
     get product with id
     :param id_product: id product
     :type product_name: int
     """
+    try:
+        int(id_product)
+    except ValueError as e:
+        return None
     query = Product.objects.filter(pk=id_product).values().first()
 
     return query

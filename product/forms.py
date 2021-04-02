@@ -8,4 +8,9 @@ class SearchProduct(forms.Form):
     Form for search product (form is in index.html)
     """
     product = forms.CharField(label='product', max_length=100,
-                              help_text='Entrez votre produit que vous voulez remplacer')
+                              widget=forms.TextInput(
+                                  attrs={'placeholder': 'Produit', 'class': 'form-control search-product'}))
+
+    def print_form(self):
+        print(self.cleaned_data)
+        return self.cleaned_data

@@ -25,7 +25,7 @@ SECRET_KEY = 'ml-ae*qnpxyajt=7d!l4xz=@y-lh8wq7blmic4u4nlg@7+!bx%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False

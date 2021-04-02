@@ -15,25 +15,32 @@
                 <div class="col-lg-8 align-self-baseline">
                     <h2 class="text-white-75 font-weight-light mb-5">Trouvez un produit de substitution pour ceux que
                         vous consommez tous les jours</h2>
-                    {#                    <form action="{% url 'index' %}" method="post">#}
-                    {#                        {% csrf_token %}#}
-                    {#                        {{ form }}#}
-                    {#                        <input type="submit" value="Submit">#}
-                    {#                    </form>#}
-
                     <form class="input-group mb-3" action="{% url 'index' %}" method="post">
                         {% csrf_token %}
-                        <label for="product"></label><input type="text"
-                                                            class="form-control search-product"
-                                                            placeholder="Produit"
-                                                            name="product"
-                                                            id="product">
-
-                        <button class="input-group-append">
-                            <span type="submit" class="input-group-text btn-search-product btn btn-xl"
-                                  id="basic-addon2">Chercher</span>
+                        {{ form.product }}
+                        <button type="submit" class="btn-search-product btn" id="basic-addon2">
+{#                            <span type="submit" class="input-group-text btn-search-product btn btn-xl"#}
+{#                                  id="basic-addon2">Chercher</span>#}
+                            chercher
                         </button>
                     </form>
+
+
+                    {#                    <form class="input-group mb-3" action="{% url 'index' %}" method="post">#}
+                    {#                        {% csrf_token %}#}
+                    {#                        <label for="product"></label><input type="text"#}
+                    {#                                                            class="form-control search-product"#}
+                    {#                                                            placeholder="Produit"#}
+                    {#                                                            name="product"#}
+                    {#                                                            id="product">#}
+                    {##}
+                    {#                        <button class="input-group-append">#}
+                    {#                            <span type="submit" class="input-group-text btn-search-product btn btn-xl"#}
+                    {#                                  id="basic-addon2">Chercher</span>#}
+                    {#                        </button>#}
+                    {#                    </form>#}
+
+
                 </div>
             </div>
         </div>
