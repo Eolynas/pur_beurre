@@ -12,17 +12,23 @@ class TestProductApp(TestCase):
 
     def setUp(self):
         Product.objects.create(name="Pizza test",
-                               stores="OpenClassrooms",
-                               url= None,
-                               nutriscore="12")
-        Product.objects.create(name="Pizza test 2",
+                               image_product="https://image.fr",
                                stores="OpenClassrooms",
                                url=None,
-                               nutriscore="1")
-        Product.objects.create(name="Fromage test",
+                               nutriscore="D",
+                               image_reperes_nutrionnels="https://image_repere.fr")
+        Product.objects.create(name="Pizza test 2",
+                               image_product="https://image2.fr",
                                stores="OpenClassrooms",
-                               url='openclassrooms.fr',
-                               nutriscore="1")
+                               url='http://url.fr',
+                               nutriscore="A",
+                               image_reperes_nutrionnels="https://image_repere2.fr")
+        Product.objects.create(name="Fromage",
+                               image_product="https://image_fromage.fr",
+                               stores="Fromage City",
+                               url="y'en a pas",
+                               nutriscore="B",
+                               image_reperes_nutrionnels="https://image_repere.fr")
 
     @patch("product.open_food_fact.recover_data_api_open_food_fact.requests")
     def test_recover_api_open_food_fact(self, mock_get):
@@ -34,10 +40,12 @@ class TestProductApp(TestCase):
                 [
                     {
                         'product_name_fr': 'pizza 4 fromages',
+                        'image_url': 'https://super_image.fr',
                         'stores': 'Auchan',
                         'url': 'https://fr.openfoodfacts.org',
-                        'nutriscore_score': 8,
-                        'categories_product': 'pizza, fromage'
+                        'nutriscore_grade': 'E',
+                        'categories_product': 'pizza, fromage',
+                        'image_reperes_nutrionnels': 'https://encore_une_super_image.fr'
                     }
                 ],
             'count': 1
@@ -48,7 +56,7 @@ class TestProductApp(TestCase):
         mock_get.get.return_value.json.return_value = product_example
         recover_api = RecoverApi()
         product = recover_api.get_product(category='pizza')
-        self.assertEqual(product[0]["nutriscore_score"], 8)
+        self.assertEqual(product[0]["nutriscore"], 'E')
 
     def test_insert_data_in_db(self):
         """
@@ -56,14 +64,12 @@ class TestProductApp(TestCase):
         """
         example_dict_product = [
             {'name': 'Pizza 4 fromage',
+             'image_product': 'https://fr.openfoodfacts.org/produit/0001217',
              'stores': None,
              'url': 'https://fr.openfoodfacts.org/produit/0001217',
-             'nutriscore_score': 11, 'categories_product': ['fr:Pizza aux 4 fromages']
-             },
-            {'name': 'Pizza reine',
-             'stores': 'Auchan',
-             'url': 'https://fr.openfoodfacts.org/produit/0001218',
-             'nutriscore_score': 9, 'categories_product': ['fr:Pizza reine']
+             'nutriscore': 11,
+             'image_reperes_nutrionnels': 'https://fr.openfoodfacts.org/produit/0001217',
+             'categories_product': ["pizza"],
              }
         ]
 
@@ -77,16 +83,19 @@ class TestProductApp(TestCase):
         """
         test insert data (product & category) in db
         """
-        example_dict_product = [
-            {'name': 'Pizza 4 fromage',
+        example_dict_product_for_test_update = [
+            {'name': 'pizza 4 fromages',
+             'image_product': 'https://super_image.fr',
              'stores': 'Carrefour',
-             'url': 'https://fr.openfoodfacts.org/produit/0001217',
-             'nutriscore_score': 11, 'categories_product': ['fr:Pizza aux 4 fromages']
+             'url': 'https://fr.openfoodfacts.org',
+             'nutriscore': 'A',
+             'categories_product': ['pizza, fromage'],
+             'image_reperes_nutrionnels': 'https://encore_une_super_image.fr'
              }
         ]
-        bulk_insert_product_category(example_dict_product)
+        bulk_insert_product_category(example_dict_product_for_test_update)
 
-        query = Product.objects.get(name="Pizza 4 fromage")
+        query = Product.objects.get(name="pizza 4 fromages")
 
         self.assertEqual(query.stores, 'Carrefour')
 

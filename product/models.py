@@ -71,7 +71,7 @@ def bulk_insert_product_category(list_product: list):
     logger.info(f"il y a {number_product_insert} qui ont étaient inséré")
 
 
-def get_id_product_by_name(product_name: str) -> Union[int, bool]:
+def get_id_product_by_name(product_name: str) -> Union[int, None]:
     """
     get product with name
     :param product_name: name product enter into search bar
