@@ -54,6 +54,9 @@ class ProductInfo(generic.TemplateView):
             return context
 
 
+class Result(generic.TemplateView):
+    template_name = 'products/result.html'
+
 # class ProductResult(generic.TemplateView):
 #     template_name = 'products/product.html'
 #     form_class = SearchProduct

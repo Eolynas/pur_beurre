@@ -1,5 +1,6 @@
 """ Models postgres"""
 from typing import Union
+
 from django.db import models
 
 from product.config.config import logger
@@ -8,6 +9,9 @@ from product.config.config import logger
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -19,11 +23,53 @@ class Product(models.Model):
     image_reperes_nutrionnels = models.CharField(max_length=255, null=True)
     category = models.ManyToManyField(Category)
 
+    def __str__(self):
+        return self.name
+
 
 def delete_all_data_in_tables():
     Product.objects.all().delete()
     Category.objects.all().delete()
     logger.info("Toutes les données ont étaient éffacés")
+
+    # def bulk_insert_product_category():
+    #     """
+    #     insert all product and ur categories
+    #     """
+    #     # Creation de deux objet (product & category) pour bulk insert
+    #
+    #     p1 = Product.objects.create(name="Pizza fromage",
+    #                                 image_product="https://image.fr",
+    #                                 stores="OpenClassrooms",
+    #                                 url=None,
+    #                                 nutriscore="D",
+    #                                 image_reperes_nutrionnels="https://image_repere.fr")
+    #
+    #     p1.save()
+    #     c1 = Category.objects.create(name='Pizza')
+    #     c1.save()
+    #     p1.category.add(c1)
+    #     c2 = Category.objects.create(name='Fromage')
+    #     c2.save()
+    #     p1.category.add(c2)
+    #
+    #     get = Product.objects.filter(pk=221)
+    #     print(get)
+
+    """
+    AttributeError: 'function' object has no attribute 'value'
+>>> Category.objects.filter(product__name='Pizza fromage').all.values()
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'function' object has no attribute 'values'
+>>> Category.objects.filter(product__name='Pizza fromage').all().value()
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'QuerySet' object has no attribute 'value'
+>>> Category.objects.filter(product__name='Pizza fromage').all().values()
+<QuerySet [{'id': 312, 'name': 'Pizza'}, {'id': 313, 'name': 'Fromage'}]>
+
+    """
 
 
 def bulk_insert_product_category(list_product: list):
@@ -57,8 +103,9 @@ def bulk_insert_product_category(list_product: list):
         product_obj.save()
 
         # Creation des categories
-        categories_obj = []
+        # categories_obj = []
         for category in product['categories_product']:
+            categories_obj = []
             obj, created = Category.objects.get_or_create(
                 name=category
             )
@@ -98,3 +145,37 @@ def get_product_by_id(id_product: int) -> Union[dict, None]:
     query = Product.objects.filter(pk=id_product).values().first()
 
     return query
+
+
+def get_subsitut_for_product(product: str) -> list:
+    """
+    get subsitut at product
+    :param product: Product at changed
+    """
+    product_initial_info = Product.objects.filter(name__icontains=product).values().first()
+    print(f"Info du produit: {product_initial_info}")
+    print(f"Nutrigrade: {product_initial_info['nutriscore']}")
+    categories_at_product_initial = Category.objects.filter(product__name=product)
+    print(f"Categories: {categories_at_product_initial.all().values()}")
+
+    print(f"Le produit {product} à {categories_at_product_initial.count()} categories")
+
+    # Il me faut 6 produit de substition, donc on fait 6 / nombre de cat
+    calc_number_product_by_category = 6 / categories_at_product_initial.count()
+    if calc_number_product_by_category < 1:
+        calc_number_product_by_category = 1
+
+    print(f"Il faut récupérer {calc_number_product_by_category} produit par catégorie")
+    # Maintenant je recupere les N produit de chaque categories qui ont un nutriscore moins elevé
+    substitute_products = []
+    for index, category in enumerate(categories_at_product_initial.all().values()):
+        products = Product.objects.filter(category__name=category['name'])[:3]
+        print(f"Voici la listes des produits qui ont pour categorie {category['name']}")
+        for product in products:
+            print(product.name)
+            if not product in substitute_products:
+                if product.nutriscore.lower() <= product_initial_info['nutriscore'].lower()\
+                        and not product.name == product_initial_info['name']:
+                    substitute_products.append(product)
+    print(f"Liste de tous les produits: {substitute_products}")
+    return substitute_products
