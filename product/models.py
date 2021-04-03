@@ -155,7 +155,7 @@ def get_subsitut_for_product(product: str) -> list:
     product_initial_info = Product.objects.filter(name__icontains=product).values().first()
     print(f"Info du produit: {product_initial_info}")
     print(f"Nutrigrade: {product_initial_info['nutriscore']}")
-    categories_at_product_initial = Category.objects.filter(product__name=product)
+    categories_at_product_initial = Category.objects.filter(product__name=product_initial_info['name'])
     print(f"Categories: {categories_at_product_initial.all().values()}")
 
     print(f"Le produit {product} à {categories_at_product_initial.count()} categories")
