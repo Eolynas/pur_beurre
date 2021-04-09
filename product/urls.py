@@ -13,6 +13,7 @@ urlpatterns = [
     path('accounts/login/', views.LoginView.as_view(), name="login"),
     path('accounts/logout/', views.LogoutView.as_view(), name="logout"),
     path('accounts/dashboard/', views.DashboardUser.as_view(), name="dashboardUser"),
+    path('accounts/register/', views.RegisterUser.as_view(), name="register"),
     # path('/accounts/signup/', views.SignUp.as_view(), name="signup"),
     # path('product_result/', views.ProductResult.as_view(extra_context={'title': 'Mention Légale'}),
     #      name="product_result")

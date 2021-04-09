@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from .forms import SearchProduct
+from .forms import SearchProduct, RegisterUserForm
 from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, get_all_name_products
 
 
@@ -81,25 +81,35 @@ class AllProducts(generic.View):
         return JsonResponse(dict_products, safe=True)
 
 
-class SignUp(generic.TemplateView):
+class RegisterUser(generic.TemplateView):
     """
     page signUP
     """
 
-    template_name = 'products/signup.html'
+    template_name = 'products/register.html'
 
     def post(self, request, *args, **kwargs):
-        form = UserCreationForm(request.POST)
+        form = RegisterUserForm(request.POST)
         if form.is_valid():
-            form.save()
+
             username = form.cleaned_data.get('username')
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            email = form.cleaned_data.get('email')
             raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
+            user = authenticate(username=username,
+                                password=raw_password,
+                                first_name=first_name,
+                                last_name=last_name,
+                                email=email)
+            user = form.save(request)
             login(request, user)
             return HttpResponseRedirect('/index')
+        else:
+            return render(request, self.template_name, {'form': form})
 
     def get(self, request, *args, **kwargs):
-        form = UserCreationForm()
+        form = RegisterUserForm()
         return render(request, self.template_name, {'form': form})
 
 

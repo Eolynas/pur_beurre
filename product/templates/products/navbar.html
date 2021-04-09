@@ -19,7 +19,7 @@
                         <li class="nav-item"><a class="nav-link js-scroll-trigger"
                                                 href="{% url 'login' %}">Connexion</a></li>
                         <li class="nav-item"><a class="nav-link js-scroll-trigger"
-                                                href="{% url 'login' %}">Inscription</a></li>
+                                                href="{% url 'register' %}">Inscription</a></li>
                     {% endif %}
 
                     {% if user.is_authenticated %}
@@ -31,7 +31,7 @@
                     {% endif %}
 
                     </li>
-                
+
                 </ul>
             </div>
         </div>
