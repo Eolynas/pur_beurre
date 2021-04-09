@@ -1,9 +1,10 @@
 """ Models postgres"""
-from typing import Union
+from typing import Union, Tuple
 
 from django.db import models
 
 from product.config.config import logger
+from random import choice
 
 
 class Category(models.Model):
@@ -21,7 +22,7 @@ class Product(models.Model):
     url = models.CharField(max_length=255, null=True)
     nutriscore = models.CharField(max_length=20, null=True)
     image_reperes_nutrionnels = models.CharField(max_length=255, null=True)
-    category = models.ManyToManyField(Category)
+    category = models.ManyToManyField(Category, related_name='products')
 
     def __str__(self):
         return self.name
@@ -132,7 +133,7 @@ def get_id_product_by_name(product_name: str) -> Union[int, None]:
         return query['id']
 
 
-def get_product_by_id(id_product: int) -> Union[dict, None]:
+def get_product_by_id(id_product: int) -> Union[Product, None]:
     """
     get product with id
     :param id_product: id product
@@ -142,40 +143,76 @@ def get_product_by_id(id_product: int) -> Union[dict, None]:
         int(id_product)
     except ValueError as e:
         return None
-    query = Product.objects.filter(pk=id_product).values().first()
+    query = Product.objects.filter(pk=id_product).first()
 
     return query
 
 
-def get_subsitut_for_product(product: str) -> list:
+def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
     """
     get subsitut at product
     :param product: Product at changed
     """
-    product_initial_info = Product.objects.filter(name__icontains=product).values().first()
-    print(f"Info du produit: {product_initial_info}")
-    print(f"Nutrigrade: {product_initial_info['nutriscore']}")
-    categories_at_product_initial = Category.objects.filter(product__name=product_initial_info['name'])
-    print(f"Categories: {categories_at_product_initial.all().values()}")
+    # product_initial_info = Product.objects.filter(name__icontains=product).values().first()
+    # print(f"Info du produit: {product_initial_info}")
+    # print(f"Nutrigrade: {product_initial_info['nutriscore']}")
+    # categories_at_product_initial = Category.objects.filter(product__name=product_initial_info['name'])
+    # print(f"Categories: {categories_at_product_initial.all().values()}")
 
-    print(f"Le produit {product} à {categories_at_product_initial.count()} categories")
+    product_initial_info = Product.objects.filter(name__icontains=product).first()
+    if not product_initial_info:
+        return False
+    categories_at_product_initial = product_initial_info.category.all()
+
+    # print(f"Le produit {product} à {categories_at_product_initial.count()} categories")
 
     # Il me faut 6 produit de substition, donc on fait 6 / nombre de cat
-    calc_number_product_by_category = 6 / categories_at_product_initial.count()
-    if calc_number_product_by_category < 1:
-        calc_number_product_by_category = 1
+    # calc_number_product_by_category = 6 / categories_at_product_initial.count()
+    # if calc_number_product_by_category < 1:
+    #     calc_number_product_by_category = 1
 
-    print(f"Il faut récupérer {calc_number_product_by_category} produit par catégorie")
+    # print(f"Il faut récupérer {calc_number_product_by_category} produit par catégorie")
     # Maintenant je recupere les N produit de chaque categories qui ont un nutriscore moins elevé
     substitute_products = []
-    for index, category in enumerate(categories_at_product_initial.all().values()):
-        products = Product.objects.filter(category__name=category['name'])[:3]
-        print(f"Voici la listes des produits qui ont pour categorie {category['name']}")
+    for index, category in enumerate(categories_at_product_initial.all()):
+        # if len(substitute_products) >= 6:
+        #     break
+        list_product_by_category = []
+        products = category.products.all()
+        print(f"Voici la listes des produits qui ont pour categorie {category}")
         for product in products:
+            # if len(list_product_by_category) >= calc_number_product_by_category:
+            #     break
             print(product.name)
-            if not product in substitute_products:
-                if product.nutriscore.lower() <= product_initial_info['nutriscore'].lower()\
-                        and not product.name == product_initial_info['name']:
-                    substitute_products.append(product)
+            if not product in substitute_products \
+                    and product.nutriscore.lower() <= product_initial_info.nutriscore.lower()\
+                    and not product.name == product_initial_info.name:
+                list_product_by_category.append(product)
+                substitute_products.append(product)
+
     print(f"Liste de tous les produits: {substitute_products}")
-    return substitute_products
+
+    # J'ai tous les produits je dois en choisir 6
+    nbr_products_in_list = len(substitute_products)
+    choise_substitute_products = []
+    if nbr_products_in_list > 6:
+        for x in range(6):
+            choise = choice(substitute_products)
+            choise_substitute_products.append(choise)
+            substitute_products.remove(choise)
+
+        print(choise_substitute_products)
+
+        return product_initial_info.name, choise_substitute_products
+
+    return product_initial_info.name, substitute_products
+
+
+
+def get_all_name_products():
+    """
+    get all name product for autocomplete
+    """
+    print("stop")
+    all_products = Product.objects.all().values('name')
+    return all_products

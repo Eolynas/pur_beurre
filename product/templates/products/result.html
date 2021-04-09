@@ -22,26 +22,29 @@
         </div>
     </div>
     <div class="container">
-        <div class="row">
+        <div class="row row-cols-3 products">
             {%  for product in substitut_products %}
-            <div class="col-sm border border-info product">
+            <div class="product">
                 <div class="container_img_product">
-                    <img class="img_product" src="{% static 'product/img/bg-masthead.jpg' %}">
+                    <img class="img_product" src="{{ product.image_product }}">
 
-                    <span class="nutri_grade">
-                        <p>{{  product.nutriscore }}</p>
+{#                    <span class="nutri_grade nutri_grade_color_{{ product.nutriscore }}">#}
+{#                        <p>{{  product.nutriscore|upper }}</p>#}
+{#                    </span>#}
+                    <span class="nutri_grade nutri_grade_color_{{ product.nutriscore }}">
+                        <img class="" src="../../static/product/img/nutriscore/nutriscore_grade_{{ product.nutriscore }}.png" alt=""/>
                     </span>
                 </div>
                 <p>{{  product.name }}</p>
-                <div class="save_product d-flex flex-row justify-content-center">
-                    <i class="fas fa-save"></i>
-                    <p class="">Sauvegarder</p>
-                </div>
+{#                <div class="save_product d-flex flex-row justify-content-center">#}
+{#                    <i class="fas fa-save"></i>#}
+{#                    <p class="">Sauvegarder</p>#}
+{#                </div>#}
             </div>
             {% endfor %}
-
-
         </div>
+
+
     </div>
 
 

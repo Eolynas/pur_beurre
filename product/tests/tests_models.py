@@ -7,13 +7,13 @@ from product.models import bulk_insert_product_category, \
     Product, Category, \
     get_id_product_by_name, \
     get_product_by_id, \
-    get_subsitut_for_product
+    get_subsitut_for_product, \
+    get_all_name_products
 
 
 class TestProductApp(TestCase):
 
     def setUp(self):
-        # product_object = Product()
         c1 = Category.objects.create(name='Pizza')
         c2 = Category.objects.create(name='Fromage')
         c3 = Category.objects.create(name='Test')
@@ -26,8 +26,7 @@ class TestProductApp(TestCase):
                                     nutriscore="D",
                                     image_reperes_nutrionnels="https://image_repere.fr")
         p1.save()
-        p1.category.add(c1)
-        p1.category.add(c3)
+        p1.category.add(c1, c3)
 
         p2 = Product.objects.create(name="Pizza fromage",
                                     image_product="https://image.fr",
@@ -36,9 +35,7 @@ class TestProductApp(TestCase):
                                     nutriscore="C",
                                     image_reperes_nutrionnels="https://image_repere.fr")
 
-        p2.category.add(c1)
-        p2.category.add(c2)
-        p2.category.add(c3)
+        p2.category.add(c1, c2, c3)
 
         p3 = Product.objects.create(name="Pizza fromage meilleur",
                                     image_product="https://image.fr",
@@ -47,11 +44,15 @@ class TestProductApp(TestCase):
                                     nutriscore="A",
                                     image_reperes_nutrionnels="https://image_repere.fr")
 
-        p3.category.add(c1)
-        p3.category.add(c2)
-        p3.category.add(c4)
+        p3.category.add(c1, c2, c4)
 
-        product_toto = 'toto'
+        p4 = Product.objects.create(name="Pizza 5 fromage",
+                                    image_product="https://image.fr",
+                                    stores="OpenClassrooms",
+                                    url='https://masuperpizza.fr',
+                                    nutriscore="A",
+                                    image_reperes_nutrionnels="https://image_repere.fr")
+        p4.category.add(c1, c2, c4)
 
     def test_insert_data_in_db(self):
         """
@@ -126,12 +127,13 @@ class TestProductApp(TestCase):
         id_test_5 = None
 
         # TODO: Peut-on tester avec un str ? car j'ai un typeError alors que l'except est géré
+        id_product_test = Product.objects.filter(name__icontains='Pizza test').first().id
 
-        query_by_id = get_product_by_id(id_test_1)
-        self.assertEqual(query_by_id['name'], 'Pizza test')
+        query_by_id = get_product_by_id(id_product_test)
+        self.assertEqual(query_by_id.name, 'Pizza test')
 
         query_by_id = get_product_by_id(id_test_2)
-        self.assertEqual(query_by_id['name'], None)
+        self.assertEqual(query_by_id, None)
 
     def test_get_substitut(self):
         """
@@ -139,8 +141,23 @@ class TestProductApp(TestCase):
         """
 
         product = "Pizza test"
-        substitute_products = get_subsitut_for_product(product)
-        expected_products = ['Pizza fromage', 'Pizza fromage meilleur']
+        get_substitute_products = get_subsitut_for_product(product)
+        expected_products = ['Pizza fromage', 'Pizza fromage meilleur', 'Pizza 5 fromage']
+
+        initial_product = get_substitute_products[0]
+        substitute_products = get_substitute_products[1]
 
         for substitute_product in substitute_products:
             self.assertIn(substitute_product.name, expected_products)
+
+        get_wrong_substitute_products = get_subsitut_for_product('toto')
+        print(get_wrong_substitute_products)
+
+    def test_get_all_products(self):
+        """
+        test get all name product
+        """
+
+        all_products = get_all_name_products()
+        self.assertEqual(len(all_products), 3)
+

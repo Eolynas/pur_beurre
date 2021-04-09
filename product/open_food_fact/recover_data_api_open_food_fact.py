@@ -29,17 +29,25 @@ class RecoverApi:
             page = 1
             list_list_product = []
             number_product = int(config['API_OFF']['max_product_by_category'])
-            while len(list_list_product) <= number_product:
+            loop_continue = True
+            # while len(list_list_product) <= number_product:
+            while loop_continue:
                 query = requests.get(f'https://fr.openfoodfacts.org/category/{category}.json?page={page}').json()
                 if int(query['count']) == 0:
                     logger.info(f"Aucune données dans l'API pour la catégory {category}")
                     return list_list_product
-                elif int(query['count']) < int(config['API_OFF']['max_product_by_category']):
-                    number_product = int(query['count'])
+                # elif int(query['count']) < int(config['API_OFF']['max_product_by_category']):
+                #     number_product = int(query['count'])
 
                 for product in query['products']:
                     product_list = {}
-                    if product.get("product_name_fr"):
+                    if product.get("product_name_fr") and \
+                            product.get("image_url") and \
+                            product.get("stores") and \
+                            product.get("url") and \
+                            product.get("nutriscore_grade") and \
+                            product.get("image_nutrition_url") and \
+                            product.get("categories"):
                         product_list['name'] = product.get("product_name_fr").strip()
 
                         product_list['image_product'] = product.get("image_url")
@@ -57,7 +65,8 @@ class RecoverApi:
                         list_list_product.append(product_list)
                 page += 1
 
-            return list_list_product[:number_product]
+                if query['page_count'] == page:
+                    return list_list_product
 
         except AttributeError as e:
             logger.info("stop")
