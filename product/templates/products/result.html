@@ -7,7 +7,11 @@
             <div class="row h-100 align-items-center justify-content-center text-center">
                 <div class="col-lg-10">
                     <h1 class="text-uppercase text-white font-weight-bold">
-                        {{  initial_product }}
+                        {% if initial_product %}
+                            {{  initial_product }}
+                        {% else %}
+                            Aucun produit trouvé
+                        {% endif %}
                     </h1>
                     <hr class="divider my-4"/>
                 </div>
@@ -15,6 +19,7 @@
         </div>
     </header>
 
+    {% if initial_product %}
     <div class="row align-items-center justify-content-center text-center mt-4">
         <div class="col-lg-10">
             <h4 class="font-weight-bold"> Vous pouvez remplacer cet aliment par:</h4>
@@ -28,24 +33,25 @@
                 <div class="container_img_product">
                     <img class="img_product" src="{{ product.image_product }}">
 
-{#                    <span class="nutri_grade nutri_grade_color_{{ product.nutriscore }}">#}
-{#                        <p>{{  product.nutriscore|upper }}</p>#}
-{#                    </span>#}
                     <span class="nutri_grade nutri_grade_color_{{ product.nutriscore }}">
                         <img class="" src="../../static/product/img/nutriscore/nutriscore_grade_{{ product.nutriscore }}.png" alt=""/>
                     </span>
                 </div>
                 <p>{{  product.name }}</p>
-{#                <div class="save_product d-flex flex-row justify-content-center">#}
-{#                    <i class="fas fa-save"></i>#}
-{#                    <p class="">Sauvegarder</p>#}
-{#                </div>#}
+
+                <div class="save_product">
+                    <i class="fa fa-save" aria-hidden="true"></i>
+                    <p>Sauvegarder</p>
+                </div>
+
             </div>
+
             {% endfor %}
         </div>
 
 
     </div>
+    {% endif %}
 
 
 {% endblock %}

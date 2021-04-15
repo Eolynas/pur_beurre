@@ -1,5 +1,5 @@
 """ All view Product app"""
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.template import loader
 from django.views import generic, View
@@ -34,6 +34,7 @@ class Legal(generic.TemplateView):
 class ProductInfo(generic.TemplateView):
     """
     Page product url/product/<id>
+    /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
     """
     template_name = 'products/product.html'
 
@@ -51,6 +52,9 @@ class ProductInfo(generic.TemplateView):
 
 
 class Result(generic.FormView, generic.TemplateView):
+    """
+    view for url after research
+    """
     template_name = 'products/result.html'
     substitute_products = {}
     form_class = SearchProduct
@@ -61,13 +65,23 @@ class Result(generic.FormView, generic.TemplateView):
         if form.is_valid():
             result_form = form.print_form()
             result = get_subsitut_for_product(result_form['product'])
+            if result is False:
+                # return HttpResponseNotFound("<h1>Aucun produit n'a était trouvé</h1>")
+                return render(request, self.template_name, {'info': "Aucun produit trouvé"})
             substitute_products['initial_product'] = result[0]
             substitute_products['substitut_products'] = result[1]
 
             return render(request, self.template_name, substitute_products)
+        # else:
+        #     return render(request, self.template_name, substitute_products)
 
 
 class AllProducts(generic.View):
+    """
+    View for all products in the form of JSON
+    she is there to do the autocompletion
+    /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
+    """
 
     def get(self, request, *args, **kwargs):
         data = get_all_name_products()
@@ -92,16 +106,6 @@ class RegisterUser(generic.TemplateView):
         form = RegisterUserForm(request.POST)
         if form.is_valid():
 
-            username = form.cleaned_data.get('username')
-            first_name = form.cleaned_data.get('first_name')
-            last_name = form.cleaned_data.get('last_name')
-            email = form.cleaned_data.get('email')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username,
-                                password=raw_password,
-                                first_name=first_name,
-                                last_name=last_name,
-                                email=email)
             user = form.save(request)
             login(request, user)
             return HttpResponseRedirect('/index')
@@ -163,6 +167,3 @@ class DashboardUser(generic.TemplateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
-
-
-

@@ -19,9 +19,7 @@
             <!-- Login Form -->
             <form method="post">
                 {% csrf_token %}
-{#                {{ form.as_p }}#}
-                      <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-                      <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+                {{ form }}
                 <input type="submit" class="fadeIn fourth" value="Log In">
             </form>
 

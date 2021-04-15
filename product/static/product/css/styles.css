@@ -10846,3 +10846,10 @@ header.masthead h1 {
     margin: 5px 7px 0 0;
     color: red;
 }
+
+.save_product {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+

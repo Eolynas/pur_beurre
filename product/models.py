@@ -3,7 +3,7 @@ from typing import Union, Tuple
 
 from django.db import models
 
-from product.config.config import logger
+from tools import logger
 from random import choice
 
 
@@ -208,10 +208,10 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
     return product_initial_info.name, substitute_products
 
 
-
 def get_all_name_products():
     """
     get all name product for autocomplete
+    /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
     """
     print("stop")
     all_products = Product.objects.all().values('name')

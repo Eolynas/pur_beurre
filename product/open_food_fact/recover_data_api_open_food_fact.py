@@ -2,7 +2,7 @@ import sys
 
 import requests
 
-from product.config.config import logger, config
+from tools import config, logger
 
 
 class RecoverApi:
@@ -29,9 +29,9 @@ class RecoverApi:
             page = 1
             list_list_product = []
             number_product = int(config['API_OFF']['max_product_by_category'])
-            loop_continue = True
+            # loop_continue = True
             # while len(list_list_product) <= number_product:
-            while loop_continue:
+            while True:
                 query = requests.get(f'https://fr.openfoodfacts.org/category/{category}.json?page={page}').json()
                 if int(query['count']) == 0:
                     logger.info(f"Aucune données dans l'API pour la catégory {category}")
