@@ -152,6 +152,8 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
     """
     get subsitut at product
     :param product: Product at changed
+    :return: product_initial_info.name: object product
+    :return: choise_substitute_products: list object product
     """
     # product_initial_info = Product.objects.filter(name__icontains=product).values().first()
     # print(f"Info du produit: {product_initial_info}")
@@ -179,18 +181,15 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
         #     break
         list_product_by_category = []
         products = category.products.all()
-        print(f"Voici la listes des produits qui ont pour categorie {category}")
         for product in products:
             # if len(list_product_by_category) >= calc_number_product_by_category:
             #     break
-            print(product.name)
             if not product in substitute_products \
                     and product.nutriscore.lower() <= product_initial_info.nutriscore.lower()\
                     and not product.name == product_initial_info.name:
                 list_product_by_category.append(product)
                 substitute_products.append(product)
 
-    print(f"Liste de tous les produits: {substitute_products}")
 
     # J'ai tous les produits je dois en choisir 6
     nbr_products_in_list = len(substitute_products)
@@ -203,9 +202,9 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
 
         print(choise_substitute_products)
 
-        return product_initial_info.name, choise_substitute_products
+        return product_initial_info, choise_substitute_products
 
-    return product_initial_info.name, substitute_products
+    return product_initial_info, substitute_products
 
 
 def get_all_name_products():
