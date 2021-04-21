@@ -5,6 +5,7 @@ from django.db import models
 
 from tools import logger
 from random import choice
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -23,6 +24,7 @@ class Product(models.Model):
     nutriscore = models.CharField(max_length=20, null=True)
     image_reperes_nutrionnels = models.CharField(max_length=255, null=True)
     category = models.ManyToManyField(Category, related_name='products')
+    user_save = models.ManyToManyField(User, related_name='user_save_products')
 
     def __str__(self):
         return self.name

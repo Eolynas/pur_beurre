@@ -198,3 +198,16 @@ class TestViews(TestCase):
         response = self.client.get('/accounts/dashboard/')
         self.assertEqual(response.status_code, 302)
 
+    def test_product_info(self):
+        """
+        Test page product info
+        """
+        pass
+
+    def test_logout(self):
+        """
+        Test logout
+        """
+        pass
+
+

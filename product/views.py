@@ -34,7 +34,6 @@ class Legal(generic.TemplateView):
 class ProductInfo(generic.TemplateView):
     """
     Page product url/product/<id>
-    /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
     """
     template_name = 'products/product.html'
 
@@ -76,23 +75,23 @@ class Result(generic.FormView, generic.TemplateView):
         #     return render(request, self.template_name, substitute_products)
 
 
-class AllProducts(generic.View):
-    """
-    View for all products in the form of JSON
-    she is there to do the autocompletion
-    /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
-    """
-
-    def get(self, request, *args, **kwargs):
-        data = get_all_name_products()
-        dict_products = {}
-        dict_products['products'] = data
-        list_products = []
-        for product in data:
-            list_products.append(product['name'])
-        dict_products['products'] = list_products
-
-        return JsonResponse(dict_products, safe=True)
+# class AllProducts(generic.View):
+#     """
+#     View for all products in the form of JSON
+#     she is there to do the autocompletion
+#     /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
+#     """
+#
+#     def get(self, request, *args, **kwargs):
+#         data = get_all_name_products()
+#         dict_products = {}
+#         dict_products['products'] = data
+#         list_products = []
+#         for product in data:
+#             list_products.append(product['name'])
+#         dict_products['products'] = list_products
+#
+#         return JsonResponse(dict_products, safe=True)
 
 
 class RegisterUser(generic.TemplateView):
@@ -139,10 +138,6 @@ class LoginView(generic.TemplateView):
                 login(request, user)
                 print(request, f"You are now logged in as {username}")
                 return HttpResponseRedirect('/')
-            else:
-                print(request, "Invalid username or password.")
-        else:
-            print(request, "Invalid username or password.")
 
         return render(request, self.template_name, context={"form": form})
 
