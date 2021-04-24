@@ -7,9 +7,11 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.http import JsonResponse
 
 from .forms import SearchProduct, RegisterUserForm
-from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, get_all_name_products
+from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, get_all_name_products, save_product_for_user, get_product_save_user
+
 
 
 class Index(View):
@@ -69,29 +71,16 @@ class Result(generic.FormView, generic.TemplateView):
                 return render(request, self.template_name, {'info': "Aucun produit trouvé"})
             substitute_products['initial_product'] = result[0]
             substitute_products['substitut_products'] = result[1]
+            if request.user.is_authenticated:
+                substitute_products['product_save_for_user'] = get_product_save_user(request.user)
 
             return render(request, self.template_name, substitute_products)
-        # else:
-        #     return render(request, self.template_name, substitute_products)
 
-
-# class AllProducts(generic.View):
-#     """
-#     View for all products in the form of JSON
-#     she is there to do the autocompletion
-#     /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
-#     """
-#
-#     def get(self, request, *args, **kwargs):
-#         data = get_all_name_products()
-#         dict_products = {}
-#         dict_products['products'] = data
-#         list_products = []
-#         for product in data:
-#             list_products.append(product['name'])
-#         dict_products['products'] = list_products
-#
-#         return JsonResponse(dict_products, safe=True)
+    # def get(self, request, *args, **kwargs):
+    #
+    #     save_product_for_user(kwargs['id_product'], user=request.user)
+    #
+    #     return render(request, self.template_name)
 
 
 class RegisterUser(generic.TemplateView):
@@ -160,5 +149,53 @@ class DashboardUser(generic.TemplateView):
     template_name = 'products/dashboardUser.html'
 
     @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        user_product_save = {}
+        user_product_save['result'] = get_product_save_user(request.user)
+        user_product_save['user'] = request.user
+        # return super().dispatch(*args, **kwargs)
+        return render(request, self.template_name, user_product_save)
+
+
+class SaveProduct(View):
+    """
+    save product by user
+    """
+    # template_name = 'products/dashboardUser.html'
+
+    @method_decorator(login_required(login_url='/accounts/login/'))
+    def dispatch(self, request, *args, **kwargs):
+        product_id = request.POST['product_id']
+        result = save_product_for_user(product_id, user=request.user)
+        print(result)
+        return HttpResponseRedirect('/accounts/dashboard/')
+        # return redirect('dashboardUser')
+
+        # if request.user.is_authenticated:
+        #     save_product_for_user(kwargs['id_product'], user=request.user)
+        #
+        #     # return render(request, self.template_name)
+        #     to_json = {'result': False}
+        #     return HttpResponseRedirect(reverse('dashboardUser'))
+        # else:
+        #     return HttpResponseRedirect(reverse('login'))
+
+
+
+# class AllProducts(generic.View):
+#     """
+#     View for all products in the form of JSON
+#     she is there to do the autocompletion
+#     /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
+#     """
+#
+#     def get(self, request, *args, **kwargs):
+#         data = get_all_name_products()
+#         dict_products = {}
+#         dict_products['products'] = data
+#         list_products = []
+#         for product in data:
+#             list_products.append(product['name'])
+#         dict_products['products'] = list_products
+#
+#         return JsonResponse(dict_products, safe=True)

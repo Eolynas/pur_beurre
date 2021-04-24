@@ -88,7 +88,7 @@ class TestViews(TestCase):
         """
         response = self.client.get('/legal/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Mention legal', str(response.content))
+        self.assertIn('<h1 class="text-uppercase text-white font-weight-bold">Mention Legal</h1>', str(response.rendered_content))
 
         response = self.client.post('/legal/')
         self.assertEqual(response.status_code, 405)
@@ -196,18 +196,31 @@ class TestViews(TestCase):
         # ----------- GET AUTHENTIFICATED ----------- #
         self.client.force_login(User.objects.get_or_create(username='bob')[0])
         response = self.client.get('/accounts/dashboard/')
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
     def test_product_info(self):
         """
         Test page product info
+        - status_code (200)
         """
-        pass
+
+        product = Product.objects.first()
+        print(product)
+        url = f"/products/{product.id}/"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'products/product.html')
+
+        response = self.client.get("/products/232323/")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Produit non trouvé', str(response.rendered_content))
 
     def test_logout(self):
         """
         Test logout
         """
-        pass
+        self.client.force_login(User.objects.get_or_create(username='bob')[0])
+        response = self.client.get('/accounts/logout/')
+        self.assertEqual(response.status_code, 302)
 
 
