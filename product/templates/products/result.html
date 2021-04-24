@@ -31,6 +31,11 @@
                 <hr class="divider my-4"/>
             </div>
         </div>
+        {% if not user.is_authenticated %}
+            <div class="info_auth">
+                <h4>Penser à vous enregistrer ou vous authentifier pour sauvegarder les produits</h4>
+            </div>
+        {% endif %}
         {#    TODO Ancienne affichage#}
         <div class="container">
             <div class="row row-cols-3 products">
@@ -47,8 +52,35 @@
                         </a>
                         <a href="{% url "products" id_product=product.id %}">{{ product.name }}</a>
                         <div class="save_product">
-                            <i class="fa fa-save" aria-hidden="true"></i>
-                            <p>Sauvegarder</p>
+
+                            {% if user.is_authenticated %}
+
+                                {% if product in product_save_for_user %}
+                                    <p class="button_save_product_true">
+                                        <i class="fa fa-save" aria-hidden="true"></i>
+                                        Deja sauvegardé
+                                    </p>
+                                {% else %}
+                                    <form action="{% url "product_save" %}" method="post">
+                                        {% csrf_token %}
+                                        <div>
+                                            <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
+                                        </div>
+                                        <div>
+                                            <button type="submit">
+                                                <i class="fa fa-save" aria-hidden="true"></i>
+                                                Sauvegarder {{ product.id }}
+                                            </button>
+                                        </div>
+                                        <input type="hidden" id="postId" name="postId" value="34657">
+                                    </form>
+{#                                    <button type="button" id="submit_save_product{{ product.id }}"#}
+{#                                            data-button="{{ product.id }}">#}
+{#                                        <i class="fa fa-save" aria-hidden="true"></i>#}
+{#                                        <a href="{% url "product_save" id_product=product.id %}">Sauvegarder</a>#}
+{#                                    </button>#}
+                                {% endif %}
+                            {% endif %}
                         </div>
                     </div>
 
@@ -56,23 +88,6 @@
             </div>
         </div>
 
-        {#                <div id="portfolio">#}
-        {#                    <div class="container-fluid p-0">#}
-        {#                        <div class="row no-gutters">#}
-        {#                            {% for product in substitut_products %}#}
-        {#                                <div class="col-lg-4 col-sm-6">#}
-        {#                                    <a class="portfolio-box" href="{% url "products" id_product=product.id %}">#}
-        {#                                        <img class="img-fluid" src="{{ product.image_product }}" alt=""/>#}
-        {#                                        <div class="portfolio-box-caption">#}
-        {#                                            <div class="project-category text-white-50">Noms du produit</div>#}
-        {#                                            <div class="project-name">{{ product.name }}</div>#}
-        {#                                        </div>#}
-        {#                                    </a>#}
-        {#                                </div>#}
-        {#                            {% endfor %}#}
-        {#                        </div>#}
-        {#                    </div>#}
-        {#                </div>#}
 
     {% endif %}
 

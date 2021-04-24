@@ -209,6 +209,24 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
     return product_initial_info, substitute_products
 
 
+def save_product_for_user(id_product: int, user: User):
+    """
+    Save product adding by user
+    """
+    product = get_product_by_id(id_product)
+    result = product.user_save.add(user)
+    product.save()
+
+
+def get_product_save_user(user):
+    """
+    get all product save by user
+    """
+    user_product_save = Product.objects.filter(user_save=user.id).all()
+
+    return user_product_save
+
+
 def get_all_name_products():
     """
     get all name product for autocomplete
@@ -217,3 +235,5 @@ def get_all_name_products():
     print("stop")
     all_products = Product.objects.all().values('name')
     return all_products
+
+

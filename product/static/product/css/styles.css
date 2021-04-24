@@ -10868,3 +10868,16 @@ header.masthead h1 {
     justify-content: center;
 }
 
+.button_save_product{
+    background-color: green;
+}
+
+.info_auth {
+    background-color: rgba(79, 198, 224, 0.31);
+    text-align: center;
+    margin: 20px;
+    padding: 40px 20px 40px 20px;
+    box-shadow: 10px 5px 5px #0000005e;
+
+}
+
