@@ -10,8 +10,8 @@ class SearchProduct(forms.Form):
     """
     product = forms.CharField(label='product', max_length=100,
                               widget=forms.TextInput(
-                                  attrs={'placeholder': 'Produit',
-                                         'class': 'form-control search-product'}))
+                                  attrs={'placeholder': 'Chercher',
+                                         'class': 'form-control mr-sm-2 search-product'}))
 
     def print_form(self):
         print(self.cleaned_data)
