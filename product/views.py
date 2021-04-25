@@ -9,9 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 
-from .forms import SearchProduct, RegisterUserForm
+from .forms import SearchProduct, RegisterUserForm, SearchProductNavBar
 from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, get_all_name_products, save_product_for_user, get_product_save_user
-
 
 
 class Index(View):
@@ -20,10 +19,11 @@ class Index(View):
     """
     template_name = 'products/index.html'
     form_class = SearchProduct
+    form_navbar = SearchProductNavBar
 
     def get(self, request):
 
-        return render(request, self.template_name, {'form': self.form_class})
+        return render(request, self.template_name, {'form': self.form_class, 'form_navbar': self.form_navbar})
 
 
 class Legal(generic.TemplateView):
