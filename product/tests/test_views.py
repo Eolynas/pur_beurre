@@ -73,11 +73,14 @@ class TestViews(TestCase):
 
         loggin_user = self.client.force_login(User.objects.get_or_create(username='testuser')[0])
         response = self.client.get('')
-        self.assertIn('logout', response.content.decode("utf-8"))
-        self.assertNotIn('login', response.content.decode("utf-8"))
+        icon_log_out = "<i class=\"fas fa-sign-out-alt\"></i>"
+        icon_log_in = "<i class=\"fas fa-sign-in-alt\"></i>"
+        self.assertIn(icon_log_out, response.content.decode("utf-8"))
+        self.assertNotIn(icon_log_in, response.content.decode("utf-8"))
 
         self.client.logout()
         response = self.client.get('')
+
         self.assertIn('login', response.content.decode("utf-8"))
         self.assertNotIn('logout', response.content.decode("utf-8"))
 

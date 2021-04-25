@@ -10905,7 +10905,7 @@ header.masthead h1 {
     enable-background: "new 0 0 512 512";
 }
 
-.fa-thumbs-up, .fa-sign-out-alt {
+.fa-thumbs-up, .fa-sign-out-alt, .fa-sign-in-alt, .fa-user-plus {
     font-size: 30px;
 }
 

@@ -11,34 +11,41 @@
                     </h1>
                     <hr class="divider my-4"/>
                 </div>
-                {#            <div class="col-lg-8 align-self-baseline">#}
-                {#                <p class="text-white-75 font-weight-light mb-5">Start Bootstrap can help you build better websites using#}
-                {#                    the Bootstrap framework! Just download a theme and start customizing, no strings attached!</p>#}
-                {#                <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Find Out More</a>#}
-                {#            </div>#}
             </div>
         </div>
     </header>
 
-    <div class="container">
-        <div class="row row-cols-3 products">
-            {% for product in result %}
-                <div class="product">
-                    <a class="container_img_product" href="{% url "products" id_product=product.id %}">
-                        <img class="img_product" src="{{ product.image_product }}">
+     <section class="page-section">
+        <div class="container">
+            <p class="text-center mt-0">Email</p>
+            <hr class="divider my-4"/>
+            <h2 class="text-center mt-0">
+                {{ user.email}}
+            </h2>
 
-                        <span class="nutri_grade nutri_grade_color_{{ product.nutriscore }}">
-                                <img class=""
-                                     src="../../static/product/img/nutriscore/nutriscore_grade_{{ product.nutriscore }}.png"
-                                     alt=""/>
-                            </span>
-                    </a>
-                    <a href="{% url "products" id_product=product.id %}">{{ product.name }}</a>
-                </div>
-
-            {% endfor %}
         </div>
-    </div>
+    </section>
+
+    {#     #TODO: A supprimer #}
+    {#    <div class="container">#}
+    {#        <div class="row row-cols-3 products">#}
+    {#            {% for product in result %}#}
+    {#                <div class="product">#}
+    {#                    <a class="container_img_product" href="{% url "products" id_product=product.id %}">#}
+    {#                        <img class="img_product" src="{{ product.image_product }}">#}
+    {##}
+    {#                        <span class="nutri_grade nutri_grade_color_{{ product.nutriscore }}">#}
+    {#                                <img class=""#}
+    {#                                     src="../../static/product/img/nutriscore/nutriscore_grade_{{ product.nutriscore }}.png"#}
+    {#                                     alt=""/>#}
+    {#                            </span>#}
+    {#                    </a>#}
+    {#                    <a href="{% url "products" id_product=product.id %}">{{ product.name }}</a>#}
+    {#                </div>#}
+    {##}
+    {#            {% endfor %}#}
+    {#        </div>#}
+    {#    </div>#}
 
 
 
