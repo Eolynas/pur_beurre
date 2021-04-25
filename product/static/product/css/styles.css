@@ -10885,6 +10885,10 @@ header.masthead h1 {
 
 /* ******* NAVBAR ******* */
 
+.navbar_scroll {
+    background-color: #563529 !important;
+}
+
 .img_logo {
     width: 20%;
     padding: 0 10px 0 0;
