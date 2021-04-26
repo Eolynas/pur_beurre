@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 
-from .forms import SearchProduct, RegisterUserForm, SearchProductNavBar
+from .forms import SearchProduct, RegisterUserForm, SearchProductNavBar, UserProfileForm
 from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, get_all_name_products, save_product_for_user, get_product_save_user
 
 
@@ -67,7 +67,6 @@ class Result(generic.FormView, generic.TemplateView):
             result_form = form.print_form()
             result = get_subsitut_for_product(result_form['product'])
             if result is False:
-                # return HttpResponseNotFound("<h1>Aucun produit n'a était trouvé</h1>")
                 return render(request, self.template_name, {'info': "Aucun produit trouvé"})
             substitute_products['initial_product'] = result[0]
             substitute_products['substitut_products'] = result[1]
@@ -75,12 +74,6 @@ class Result(generic.FormView, generic.TemplateView):
                 substitute_products['product_save_for_user'] = get_product_save_user(request.user)
 
             return render(request, self.template_name, substitute_products)
-
-    # def get(self, request, *args, **kwargs):
-    #
-    #     save_product_for_user(kwargs['id_product'], user=request.user)
-    #
-    #     return render(request, self.template_name)
 
 
 class RegisterUser(generic.TemplateView):
@@ -92,17 +85,22 @@ class RegisterUser(generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         form = RegisterUserForm(request.POST)
-        if form.is_valid():
+        profile_form = UserProfileForm(request.POST)
+        if form.is_valid() and profile_form.is_valid():
 
             user = form.save(request)
+            profile = profile_form.save(commit = False)
+            profile.user = user
+            profile.save(request)
             login(request, user)
             return HttpResponseRedirect('/index')
         else:
-            return render(request, self.template_name, {'form': form})
+            return render(request, self.template_name, {'form': form, 'profile_form': profile_form})
 
     def get(self, request, *args, **kwargs):
         form = RegisterUserForm()
-        return render(request, self.template_name, {'form': form})
+        profile_form = UserProfileForm()
+        return render(request, self.template_name, {'form': form, 'profile_form': profile_form})
 
 
 class LoginView(generic.TemplateView):
