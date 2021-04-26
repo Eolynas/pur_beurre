@@ -1,5 +1,5 @@
 """ All view Product app"""
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render
 from django.template import loader
 from django.views import generic, View
@@ -167,22 +167,34 @@ class SaveProduct(View):
 
     @method_decorator(login_required(login_url='/accounts/login/'))
     def dispatch(self, request, *args, **kwargs):
+
         product_id = request.POST['product_id']
+
         result = save_product_for_user(product_id, user=request.user)
+        if not result:
+            raise Http404("Une erreur s'est produite lors de la sauvegarde de votre produit")
         print(result)
-        return HttpResponseRedirect('/accounts/dashboard/')
-        # return redirect('dashboardUser')
-
-        # if request.user.is_authenticated:
-        #     save_product_for_user(kwargs['id_product'], user=request.user)
-        #
-        #     # return render(request, self.template_name)
-        #     to_json = {'result': False}
-        #     return HttpResponseRedirect(reverse('dashboardUser'))
-        # else:
-        #     return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect('/accounts/products/')
 
 
+class MyProducts(generic.TemplateView):
+    """
+    view for save products by user
+    """
+    template_name = 'products/result.html'
+
+    @method_decorator(login_required(login_url='/accounts/login/'))
+    def get(self, request, *args, **kwargs):
+        form_navbar = SearchProductNavBar
+        save_product_by_user = get_product_save_user(request.user)
+        # product_id = request.POST['product_id']
+        # result = save_product_for_user(product_id, user=request.user)
+        # print(result)
+
+        return render(request, self.template_name, {'substitut_products': save_product_by_user,
+                                                    'myproduct': True,
+                                                    'user': request.user,
+                                                    'form_navbar': form_navbar})
 
 # class AllProducts(generic.View):
 #     """

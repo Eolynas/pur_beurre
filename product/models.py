@@ -225,9 +225,15 @@ def save_product_for_user(id_product: int, user: User):
     """
     Save product adding by user
     """
-    product = get_product_by_id(id_product)
+    # product = get_product_by_id(id_product)
+    product = get_product_by_id(4)
+
+    if not product:
+        return False
     result = product.user_save.add(user)
     product.save()
+
+    return True
 
 
 def get_product_save_user(user):
