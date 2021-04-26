@@ -64,16 +64,19 @@ class Result(generic.FormView, generic.TemplateView):
         form = self.form_class(request.POST)
         substitute_products = {}
         if form.is_valid():
+            form_navbar = SearchProductNavBar
             result_form = form.print_form()
             result = get_subsitut_for_product(result_form['product'])
             if result is False:
-                return render(request, self.template_name, {'info': "Aucun produit trouvé"})
+                return render(request, self.template_name, {'info': "Aucun produit trouvé", 'form_navbar': form_navbar})
             substitute_products['initial_product'] = result[0]
             substitute_products['substitut_products'] = result[1]
             if request.user.is_authenticated:
                 substitute_products['product_save_for_user'] = get_product_save_user(request.user)
 
-            return render(request, self.template_name, substitute_products)
+            return render(request, self.template_name, {'initial_product': result[0],
+                                                        'substitut_products': result[1],
+                                                        'form_navbar': form_navbar})
 
 
 class RegisterUser(generic.TemplateView):
@@ -123,7 +126,6 @@ class LoginView(generic.TemplateView):
 
             if user is not None:
                 login(request, user)
-                print(request, f"You are now logged in as {username}")
                 return HttpResponseRedirect('/')
 
         return render(request, self.template_name, context={"form": form})
