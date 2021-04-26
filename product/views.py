@@ -71,11 +71,13 @@ class Result(generic.FormView, generic.TemplateView):
                 return render(request, self.template_name, {'info': "Aucun produit trouvé", 'form_navbar': form_navbar})
             substitute_products['initial_product'] = result[0]
             substitute_products['substitut_products'] = result[1]
+            substitute_products['product_save_for_user'] = None
             if request.user.is_authenticated:
                 substitute_products['product_save_for_user'] = get_product_save_user(request.user)
 
-            return render(request, self.template_name, {'initial_product': result[0],
-                                                        'substitut_products': result[1],
+            return render(request, self.template_name, {'initial_product': substitute_products['initial_product'],
+                                                        'substitut_products': substitute_products['substitut_products'],
+                                                        'product_save_for_user': substitute_products['product_save_for_user'],
                                                         'form_navbar': form_navbar})
 
 
