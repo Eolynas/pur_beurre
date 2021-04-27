@@ -1,0 +1,50 @@
+{% extends 'products/base.html' %}
+{% block title %} Login {% endblock %}
+{% block content %}
+
+    {% load static %}
+    <link href="{% static 'product/css/login_register.css' %}" rel="stylesheet"/>
+
+
+
+    <div class="wrapper fadeInDown">
+
+        <div id="formContent">
+            <!-- Tabs Titles -->
+
+            <!-- Icon -->
+            {#            <div class="fadeIn first">#}
+            {#                <i class="fas fa-user-plus"></i>#}
+            {#            </div>#}
+
+            <!-- Login Form -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>{{ form.username }}</p>
+                <p>{{ form.first_name }}</p>
+                <p>{{ form.last_name }}</p>
+                <p>{{ form.email }}</p>
+                <p>{{ profile_form.name_animals }}</p>
+                <p>{{ form.password1 }}</p>
+                <p>{{ form.password2 }}</p>
+                {#                {{ form.as_p }}#}
+                {#                      <input type="text" id="login" class="fadeIn second" name="login" placeholder="Pseudo">#}
+                {#                      <input type="text" id="first_name" class="fadeIn third" name="first_name" placeholder="Prénoms">#}
+                {#                      <input type="text" id="last_name" class="fadeIn third" name="last_name" placeholder="Noms">#}
+                {#                      <input type="text" id="email" class="fadeIn third" name="email" placeholder="adresse email">#}
+                {#                      <input type="text" id="password" class="fadeIn third" name="password" placeholder="mot de passe">#}
+                <div>
+                    {{ form.errors }}
+                </div>
+                <input type="submit" class="fadeIn fourth" value="Valider">
+            </form>
+
+            {#            <!-- Remind Passowrd -->#}
+            {#            <div id="formFooter">#}
+            {#                <a class="underlineHover" href="#">Forgot Password?</a>#}
+            {#            </div>#}
+
+        </div>
+    </div>
+
+{% endblock %}

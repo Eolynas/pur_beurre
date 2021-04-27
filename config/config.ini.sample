@@ -1,0 +1,6 @@
+[API_OFF]
+max_product_by_category = NUMBER
+list_categories = STR
+
+ATTENTION pour la liste des categories il faut mettre le noms EXACT
+Si le noms est au pluriel, il faut le mettre au pluriel sinon il va faire une redirection et il n'y aura pas de changement de page

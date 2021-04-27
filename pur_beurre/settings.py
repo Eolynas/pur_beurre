@@ -23,20 +23,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'ml-ae*qnpxyajt=7d!l4xz=@y-lh8wq7blmic4u4nlg@7+!bx%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
+
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'product.apps.ProductConfig',
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'fontawesome-free',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'pur_beurre.urls'
@@ -55,6 +62,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates']
+        # 'DIRS': [BASE_DIR / 'product/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -82,9 +90,10 @@ DATABASES = {
     'default': {
             'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
             'NAME': 'pur_beurre', # le nom de notre base de donnees creee precedemment
-            'USER': 'eddy', # attention : remplacez par votre nom d'utilisateur
-            'PASSWORD': os.environ.get("db_pswd"),
-            'HOST': '',
+            'USER': 'postgres', # attention : remplacez par votre nom d'utilisateur
+            # 'PASSWORD': os.environ.get("db_pswd"),
+            'PASSWORD': '0311',
+            'HOST': 'localhost',
             'PORT': '5432',
         }
 }
@@ -112,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'UTC'
 
@@ -123,7 +132,11 @@ USE_L10N = True
 USE_TZ = True
 
 
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+LOGIN_REDIRECT_URL = 'index'
+AUTH_PROFILE_MODULE = 'product.Profile'

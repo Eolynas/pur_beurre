@@ -1,0 +1,22 @@
+{% extends 'products/base.html' %}
+{% block title %} Not found {% endblock %}
+
+{% block content %}
+    <header class="masthead sidebar">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-10">
+                {% if info %}
+                    <h1 class="text-uppercase text-white font-weight-bold">{{ info }}</h1>
+                {% else %}
+                    <h1 class="text-uppercase text-white font-weight-bold">Erreur 404</h1>
+                {% endif %}
+                <hr class="divider my-4"/>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+{% endblock %}

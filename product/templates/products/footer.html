@@ -1,0 +1,15 @@
+
+{% block footer %}
+{% load static %}
+
+<!-- Footer-->
+<footer class="bg-dark py-5">
+    <div class="container">
+        <div class="small text-center text-muted footer">
+            <a class="font-weight-bold" href="{% url 'legal' %}" target="_blank">Mention légale</a>
+            <a class="font-weight-bold" href="{% url 'index' %}#contact" target="_blank">Contact</a>
+        </div>
+    </div>
+</footer>
+
+{% endblock %}

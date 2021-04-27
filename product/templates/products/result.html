@@ -1,0 +1,115 @@
+{% extends 'products/base.html' %}
+{% block title %} Resultat {% endblock %}
+{% load static %}
+{% block content %}
+
+    {% if initial_product.image_product %}
+        <header class="masthead masthead_product sidebar"
+                style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url({{ initial_product.image_product }});">
+    {% else %}
+        <header class="masthead sidebar">
+    {% endif %}
+{#    <header class="masthead header_result sidebar">#}
+{#        {% if initial_product.image_product %}#}
+{#            <img class="img_header" src="{{ initial_product.image_product }}">#}
+{#        {% endif %}#}
+
+<div class="container h-100">
+    <div class="row h-100 align-items-center justify-content-center text-center">
+
+        <div class="col-lg-10">
+            <h1 class="text-uppercase text-white font-weight-bold">
+                {% if initial_product %}
+                    {{ initial_product.name }}
+                {% elif info %}
+                    {{ info }}
+                {% elif user %}
+                    Bonjour {{ user.first_name }}
+                {% else %}
+                    Aucun produit trouvé
+                {% endif %}
+            </h1>
+            <hr class="divider my-4"/>
+            {% if product_not_found %}
+                <h4 class="text-white-75 font-weight-light mb-5">{{ product_not_found}}</h4>
+
+            {% elif user %}
+                <h4 class="text-white-75 font-weight-light mb-5">Voici vos produits sauvegardé</h4>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</header>
+
+{% if initial_product or myproduct%}
+    <div class="row align-items-center justify-content-center text-center mt-4">
+        <div class="col-lg-10">
+            <h4 class="font-weight-bold"> Vous pouvez remplacer cet aliment par:</h4>
+            <hr class="divider my-4"/>
+        </div>
+    </div>
+    {% if not user.is_authenticated %}
+        <div class="info_auth">
+            <h4>Penser à vous enregistrer ou vous authentifier pour sauvegarder les produits</h4>
+        </div>
+    {% endif %}
+    <div class="container py-5">
+        {# #TODO: BOUCLE PRODUCT   #}
+
+            <div class="row text-center">
+                {% for product in substitut_products %}
+                <!-- Pricing Table-->
+                <div class="col-lg-4 mb-5 ">
+                    <div class="bg-white product rounded-lg shadow">
+                        <a class="container_img_product" href="{% url "products" id_product=product.id %}">
+                            <img class="img_product" src="{{ product.image_product }}">
+                        </a>
+                        <div class="custom-separator my-4 mx-auto bg-primary"></div>
+                        <h4 href="{% url "products" id_product=product.id %}">{{ product.name }}</h4>
+
+                        <div>
+                        {% if product in product_save_for_user %}
+                            <a href="#" class="btn btn-success btn-block p-2 shadow rounded-pill">
+                                Deja Sauvegarder
+                            </a>
+
+                        {% elif myproduct %}
+
+                            <button type="submit" class="btn btn-info btn-block p-2 shadow rounded-pill">
+                                Supprimé {{ product.id }}
+                                <br><span>Fonction non prise en charge</span>
+
+                            </button>
+
+
+                        {% else %}
+
+                            <form action="{% url "product_save" %}" method="post">
+                                {% csrf_token %}
+                                <div>
+                                    <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-block p-2 shadow rounded-pill">
+                                        <i class="fa fa-save" aria-hidden="true"></i>
+                                        Sauvegarder {{ product.id }}
+                                    </button>
+                                </div>
+                                <input type="hidden" id="postId" name="postId" value="34657">
+                            </form>
+
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+
+    </div>
+    <!-- END -->
+
+
+{% endif %}
+
+{% endblock %}
