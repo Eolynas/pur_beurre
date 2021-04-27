@@ -7,7 +7,7 @@
         <header class="masthead masthead_product sidebar"
                 style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url({{ initial_product.image_product }});">
     {% else %}
-        <header class="masthead masthead_product sidebar">
+        <header class="masthead sidebar">
     {% endif %}
 {#    <header class="masthead header_result sidebar">#}
 {#        {% if initial_product.image_product %}#}
@@ -21,6 +21,8 @@
             <h1 class="text-uppercase text-white font-weight-bold">
                 {% if initial_product %}
                     {{ initial_product.name }}
+                {% elif info %}
+                    {{ info }}
                 {% elif user %}
                     Bonjour {{ user.first_name }}
                 {% else %}
@@ -28,7 +30,10 @@
                 {% endif %}
             </h1>
             <hr class="divider my-4"/>
-            {% if user %}
+            {% if product_not_found %}
+                <h4 class="text-white-75 font-weight-light mb-5">{{ product_not_found}}</h4>
+
+            {% elif user %}
                 <h4 class="text-white-75 font-weight-light mb-5">Voici vos produits sauvegardé</h4>
             {% endif %}
         </div>

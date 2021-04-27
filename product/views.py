@@ -68,7 +68,10 @@ class Result(generic.FormView, generic.TemplateView):
             result_form = form.print_form()
             result = get_subsitut_for_product(result_form['product'])
             if result is False:
-                return render(request, self.template_name, {'info': "Aucun produit trouvé", 'form_navbar': form_navbar})
+                info_product = f"le produit {result_form['product']} n'est pas présent dans notre base de donnée"
+                return render(request, self.template_name, {'info': "Aucun produit trouvé",
+                                                            'product_not_found': info_product,
+                                                            'form_navbar': form_navbar})
             substitute_products['initial_product'] = result[0]
             substitute_products['substitut_products'] = result[1]
             substitute_products['product_save_for_user'] = None

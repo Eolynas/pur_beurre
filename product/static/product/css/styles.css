@@ -10680,6 +10680,7 @@ header.masthead {
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-size: cover;
+
 }
 
 header.masthead h1 {
@@ -10951,4 +10952,13 @@ header.masthead h1 {
     background-repeat: no-repeat !important;
     background-size: contain !important;
     background-position: center !important;
+    background-color: black !important;
+}
+
+
+/* ******* INDEX ******* */
+
+.avatar {
+    width: 200px;
+    /*height: 200px;*/
 }
