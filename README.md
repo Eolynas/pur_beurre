@@ -33,6 +33,8 @@ pip install -r requirements.txt
 Création des variables d'environnment:
 ```
 db_pswd= password ur database
+SECRET_KEY = SECRET_KEY for Django App
+ENV = if product, ENV = PRODUCTION 
 
 ```
 
