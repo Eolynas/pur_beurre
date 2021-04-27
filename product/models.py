@@ -6,6 +6,34 @@ from django.db import models
 from tools import logger
 from random import choice
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.conf import settings
+
+
+# class UserProfil(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     image = models.ImageField(null=True)
+#
+#     def __str__(self):
+#         return "%s's profile" % self.user
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # profile_image = models.FileField()
+    name_animals = models.CharField(max_length=255, null=True)
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
 
 
 class Category(models.Model):
@@ -157,54 +185,38 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
     :return: product_initial_info.name: object product
     :return: choise_substitute_products: list object product
     """
-    # product_initial_info = Product.objects.filter(name__icontains=product).values().first()
-    # print(f"Info du produit: {product_initial_info}")
-    # print(f"Nutrigrade: {product_initial_info['nutriscore']}")
-    # categories_at_product_initial = Category.objects.filter(product__name=product_initial_info['name'])
-    # print(f"Categories: {categories_at_product_initial.all().values()}")
 
+    # recovery of the product & categories sought by the user
     product_initial_info = Product.objects.filter(name__icontains=product).first()
     if not product_initial_info:
         return False
     categories_at_product_initial = product_initial_info.category.all()
 
-    # print(f"Le produit {product} à {categories_at_product_initial.count()} categories")
-
-    # Il me faut 6 produit de substition, donc on fait 6 / nombre de cat
-    # calc_number_product_by_category = 6 / categories_at_product_initial.count()
-    # if calc_number_product_by_category < 1:
-    #     calc_number_product_by_category = 1
-
-    # print(f"Il faut récupérer {calc_number_product_by_category} produit par catégorie")
-    # Maintenant je recupere les N produit de chaque categories qui ont un nutriscore moins elevé
     substitute_products = []
     for index, category in enumerate(categories_at_product_initial.all()):
-        # if len(substitute_products) >= 6:
-        #     break
         list_product_by_category = []
         products = category.products.all()
         for product in products:
-            # if len(list_product_by_category) >= calc_number_product_by_category:
-            #     break
             if not product in substitute_products \
-                    and product.nutriscore.lower() <= product_initial_info.nutriscore.lower()\
+                    and product.nutriscore.lower() <= product_initial_info.nutriscore.lower() \
                     and not product.name == product_initial_info.name:
                 list_product_by_category.append(product)
                 substitute_products.append(product)
 
-
-    # J'ai tous les produits je dois en choisir 6
     nbr_products_in_list = len(substitute_products)
-    choise_substitute_products = []
+
     if nbr_products_in_list > 6:
-        for x in range(6):
-            choise = choice(substitute_products)
-            choise_substitute_products.append(choise)
-            substitute_products.remove(choise)
-
-        print(choise_substitute_products)
-
-        return product_initial_info, choise_substitute_products
+        # method to randomly choose 6 products
+        # choise_substitute_products = []
+        # for x in range(6):
+        #     choise = choice(substitute_products)
+        #     choise_substitute_products.append(choise)
+        #     substitute_products.remove(choise)
+        #
+        # print(choise_substitute_products)
+        #
+        # return product_initial_info, choise_substitute_products
+        return product_initial_info, substitute_products[:6]
 
     return product_initial_info, substitute_products
 
@@ -213,9 +225,15 @@ def save_product_for_user(id_product: int, user: User):
     """
     Save product adding by user
     """
-    product = get_product_by_id(id_product)
+    # product = get_product_by_id(id_product)
+    product = get_product_by_id(4)
+
+    if not product:
+        return False
     result = product.user_save.add(user)
     product.save()
+
+    return True
 
 
 def get_product_save_user(user):
@@ -235,5 +253,3 @@ def get_all_name_products():
     print("stop")
     all_products = Product.objects.all().values('name')
     return all_products
-
-

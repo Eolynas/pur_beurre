@@ -1,5 +1,5 @@
 """ All view Product app"""
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render
 from django.template import loader
 from django.views import generic, View
@@ -9,9 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 
-from .forms import SearchProduct, RegisterUserForm
+from .forms import SearchProduct, RegisterUserForm, SearchProductNavBar, UserProfileForm
 from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, get_all_name_products, save_product_for_user, get_product_save_user
-
 
 
 class Index(View):
@@ -20,10 +19,11 @@ class Index(View):
     """
     template_name = 'products/index.html'
     form_class = SearchProduct
+    form_navbar = SearchProductNavBar
 
     def get(self, request):
 
-        return render(request, self.template_name, {'form': self.form_class})
+        return render(request, self.template_name, {'form': self.form_class, 'form_navbar': self.form_navbar})
 
 
 class Legal(generic.TemplateView):
@@ -64,23 +64,24 @@ class Result(generic.FormView, generic.TemplateView):
         form = self.form_class(request.POST)
         substitute_products = {}
         if form.is_valid():
+            form_navbar = SearchProductNavBar
             result_form = form.print_form()
             result = get_subsitut_for_product(result_form['product'])
             if result is False:
-                # return HttpResponseNotFound("<h1>Aucun produit n'a était trouvé</h1>")
-                return render(request, self.template_name, {'info': "Aucun produit trouvé"})
+                info_product = f"le produit {result_form['product']} n'est pas présent dans notre base de donnée"
+                return render(request, self.template_name, {'info': "Aucun produit trouvé",
+                                                            'product_not_found': info_product,
+                                                            'form_navbar': form_navbar})
             substitute_products['initial_product'] = result[0]
             substitute_products['substitut_products'] = result[1]
+            substitute_products['product_save_for_user'] = None
             if request.user.is_authenticated:
                 substitute_products['product_save_for_user'] = get_product_save_user(request.user)
 
-            return render(request, self.template_name, substitute_products)
-
-    # def get(self, request, *args, **kwargs):
-    #
-    #     save_product_for_user(kwargs['id_product'], user=request.user)
-    #
-    #     return render(request, self.template_name)
+            return render(request, self.template_name, {'initial_product': substitute_products['initial_product'],
+                                                        'substitut_products': substitute_products['substitut_products'],
+                                                        'product_save_for_user': substitute_products['product_save_for_user'],
+                                                        'form_navbar': form_navbar})
 
 
 class RegisterUser(generic.TemplateView):
@@ -92,17 +93,22 @@ class RegisterUser(generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         form = RegisterUserForm(request.POST)
-        if form.is_valid():
+        profile_form = UserProfileForm(request.POST)
+        if form.is_valid() and profile_form.is_valid():
 
             user = form.save(request)
+            profile = profile_form.save(commit = False)
+            profile.user = user
+            profile.save(request)
             login(request, user)
             return HttpResponseRedirect('/index')
         else:
-            return render(request, self.template_name, {'form': form})
+            return render(request, self.template_name, {'form': form, 'profile_form': profile_form})
 
     def get(self, request, *args, **kwargs):
         form = RegisterUserForm()
-        return render(request, self.template_name, {'form': form})
+        profile_form = UserProfileForm()
+        return render(request, self.template_name, {'form': form, 'profile_form': profile_form})
 
 
 class LoginView(generic.TemplateView):
@@ -125,7 +131,6 @@ class LoginView(generic.TemplateView):
 
             if user is not None:
                 login(request, user)
-                print(request, f"You are now logged in as {username}")
                 return HttpResponseRedirect('/')
 
         return render(request, self.template_name, context={"form": form})
@@ -165,22 +170,34 @@ class SaveProduct(View):
 
     @method_decorator(login_required(login_url='/accounts/login/'))
     def dispatch(self, request, *args, **kwargs):
+
         product_id = request.POST['product_id']
+
         result = save_product_for_user(product_id, user=request.user)
+        if not result:
+            raise Http404("Une erreur s'est produite lors de la sauvegarde de votre produit")
         print(result)
-        return HttpResponseRedirect('/accounts/dashboard/')
-        # return redirect('dashboardUser')
-
-        # if request.user.is_authenticated:
-        #     save_product_for_user(kwargs['id_product'], user=request.user)
-        #
-        #     # return render(request, self.template_name)
-        #     to_json = {'result': False}
-        #     return HttpResponseRedirect(reverse('dashboardUser'))
-        # else:
-        #     return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect('/accounts/products/')
 
 
+class MyProducts(generic.TemplateView):
+    """
+    view for save products by user
+    """
+    template_name = 'products/result.html'
+
+    @method_decorator(login_required(login_url='/accounts/login/'))
+    def get(self, request, *args, **kwargs):
+        form_navbar = SearchProductNavBar
+        save_product_by_user = get_product_save_user(request.user)
+        # product_id = request.POST['product_id']
+        # result = save_product_for_user(product_id, user=request.user)
+        # print(result)
+
+        return render(request, self.template_name, {'substitut_products': save_product_by_user,
+                                                    'myproduct': True,
+                                                    'user': request.user,
+                                                    'form_navbar': form_navbar})
 
 # class AllProducts(generic.View):
 #     """

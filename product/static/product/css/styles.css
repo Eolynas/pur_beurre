@@ -10675,11 +10675,12 @@ hr.light {
 header.masthead {
     padding-top: 10rem;
     padding-bottom: calc(10rem - 4.5rem);
-    background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url("../img/bg-masthead.jpg");
+    background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url("../img/olenka-kotyk-eqsEZNCm4-c-unsplash.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-size: cover;
+
 }
 
 header.masthead h1 {
@@ -10755,9 +10756,12 @@ header.masthead h1 {
 }
 
 .search-product {
+
+    /*padding: 10px 15px 10px 15px !important;*/
     padding: 2rem 2.25rem !important;
     font-size: 0.85rem !important;
     font-weight: 700 !important;
+    margin-right: 0px !important;
 }
 
 .btn-search-product {
@@ -10775,7 +10779,6 @@ header.masthead h1 {
     padding: 2.5rem;
 }
 
-/*  ------- PRODUIT RESULTAT -------  */
 .header_result {
     background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%) !important;
     position: relative;
@@ -10799,10 +10802,18 @@ header.masthead h1 {
     /*width: 350px;*/
     position: relative;
     padding: 20px !important;
-    padding-bottom: 20px;
     /*border: 1px blue solid;*/
+    min-height: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
+.custom-separator {
+  width: 5rem;
+  height: 6px;
+  border-radius: 1rem;
+}
 
 .container_img_product {
     position: relative;
@@ -10814,39 +10825,12 @@ header.masthead h1 {
     z-index: 2;
     width: 50px;
     height: 50px;
-
-    right: 50px;
-    top: -25px;
-
-    border-radius: 50px;
-    text-align: center;
-    display: table-cell;
-    vertical-align: middle;
-    color: white;
+    right: 20%;
+    top: -10px;
 }
 
 .nutri_grade > p {
     transform: translateY(50%);
-}
-
-.nutri_grade_color_a {
-    background-color: #007517;
-}
-
-.nutri_grade_color_b {
-    background-color: #94c11e;
-}
-
-.nutri_grade_color_c {
-    background-color: #ffde00;
-}
-
-.nutri_grade_color_d {
-    background-color: #f29200;
-}
-
-.nutri_grade_color_e {
-    background-color: #dd1e01;
 }
 
 .img_product {
@@ -10859,7 +10843,7 @@ header.masthead h1 {
     /*text-align: center;*/
     /*margin: auto;*/
     margin: 5px 7px 0 0;
-    color: red;
+    /*color: red;*/
 }
 
 .save_product {
@@ -10868,16 +10852,113 @@ header.masthead h1 {
     justify-content: center;
 }
 
-.button_save_product{
+.button_save_product {
     background-color: green;
 }
 
 .info_auth {
     background-color: rgba(79, 198, 224, 0.31);
     text-align: center;
-    margin: 20px;
+    margin: 20px 20px 80px 20px;
     padding: 40px 20px 40px 20px;
     box-shadow: 10px 5px 5px #0000005e;
 
 }
 
+/* ******* NAVBAR ******* */
+
+.navbar_scroll {
+    background-color: #563529 !important;
+}
+
+.img_logo {
+    width: 20%;
+    padding: 0 10px 0 0;
+}
+
+.form_navbar {
+    margin-left: 380px;
+}
+
+.icon_account {
+    width: 30px;
+    filter: invert(68%) sepia(83%) saturate(2209%) hue-rotate(358deg) brightness(99%) contrast(106%);
+    viewBox: "0 0 512 512";
+    enable-background: "new 0 0 512 512";
+}
+
+.fa-thumbs-up, .fa-sign-out-alt, .fa-sign-in-alt, .fa-user-plus {
+    font-size: 30px;
+}
+
+@media (max-width: 576px) {
+    .img_logo {
+        width: 35%;
+    }
+
+    .form_navbar {
+        margin-left: 0px;
+    }
+}
+
+@media (max-width: 768px) {
+    .img_logo {
+        width: 35%;
+    }
+
+    .form_navbar {
+        margin-left: 0px;
+    }
+}
+
+@media (max-width: 992px) {
+    .img_logo {
+        width: 35%;
+    }
+
+    .form_navbar {
+        margin-left: 0px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .img_logo {
+        width: 35%;
+    }
+
+    .form_navbar {
+        margin-left: 0px;
+    }
+
+    .img_header {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.3;
+    }
+
+}
+
+.footer > a {
+    font-size: 15px;
+    margin: 20px;
+}
+
+/* ******* HEADER ******* */
+
+.masthead_product {
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    background-position: center !important;
+    background-color: black !important;
+}
+
+
+/* ******* INDEX ******* */
+
+.avatar {
+    width: 200px;
+    /*height: 200px;*/
+}

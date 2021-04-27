@@ -3,9 +3,12 @@
 {% load static %}
 
 <!-- Footer-->
-<footer class="bg-light py-5">
+<footer class="bg-dark py-5">
     <div class="container">
-        <div class="small text-center text-muted">Copyright © 2020 - <a href="https://eddy-hubert.fr" target="_blank">Eddy Hubert</a> | thème <a href="https://startbootstrap.com/theme/creative" target="_blank">creative</a></div>
+        <div class="small text-center text-muted footer">
+            <a class="font-weight-bold" href="{% url 'legal' %}" target="_blank">Mention légale</a>
+            <a class="font-weight-bold" href="{% url 'index' %}#contact" target="_blank">Contact</a>
+        </div>
     </div>
 </footer>
 

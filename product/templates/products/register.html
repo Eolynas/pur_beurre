@@ -18,12 +18,13 @@
             {#            </div>#}
 
             <!-- Login Form -->
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <p>{{ form.username }}</p>
                 <p>{{ form.first_name }}</p>
                 <p>{{ form.last_name }}</p>
                 <p>{{ form.email }}</p>
+                <p>{{ profile_form.name_animals }}</p>
                 <p>{{ form.password1 }}</p>
                 <p>{{ form.password2 }}</p>
                 {#                {{ form.as_p }}#}

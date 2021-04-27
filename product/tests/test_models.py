@@ -153,11 +153,3 @@ class TestProductApp(TestCase):
         get_wrong_substitute_products = get_subsitut_for_product('toto')
         print(get_wrong_substitute_products)
 
-    # def test_get_all_products(self):
-    #     """
-    #     test get all name product
-    #     """
-    #
-    #     all_products = get_all_name_products()
-    #     self.assertEqual(len(all_products), 4)
-
