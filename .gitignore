@@ -9,3 +9,6 @@ config/config.ini
 geckodriver.log
 *.json
 *.ini
+
+
+certificat.png
