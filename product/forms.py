@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from product.models import Profile
+import io
 
 
 class SearchProduct(forms.Form):
@@ -48,6 +49,8 @@ class RegisterUserForm(UserCreationForm):
     last_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'noms',
                                                                'class': 'fadeIn second'}))
 
+    image = forms.FileField(required=True)
+
     password1 = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Mot de passe',
                                                                'class': 'fadeIn fourth'}))
     password2 = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': 'saisissez de nouveau votre mot de passe',
@@ -57,31 +60,23 @@ class RegisterUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username", "first_name", "last_name", "email", "password1")
+        fields = ("username", "first_name", "last_name", "email", "image", "password1")
 
     def save(self, commit=True):
         user = super(RegisterUserForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
-        # user.profile.profile_image = self.cleaned_data["last_name"]
 
         if commit:
             user.save()
+            profile = Profile(user=user)
+            image_to_binary = self.cleaned_data["image"].file.read()
+            profile.image = image_to_binary
+            profile.save()
         return user
 
 
-class UserProfileForm(forms.ModelForm):
-
-    class Meta:
-        model = Profile
-        fields = ('name_animals',)
-
-    def save(self, *args, **kw):
-        profil = super(UserProfileForm, self).save(commit=False)
-        profil.user_id = self.cleaned_data["user_id"]
-        profil.name_animals = self.cleaned_data["name_animals"]
-        # profil.last_name = self.cleaned_data["last_name"]
 
 # #
 #     def save(self, commit=True):
