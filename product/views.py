@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 
-from .forms import SearchProduct, RegisterUserForm, SearchProductNavBar, UserProfileForm
+from .forms import SearchProduct, RegisterUserForm, SearchProductNavBar
 from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, get_all_name_products, save_product_for_user, get_product_save_user
 
 
@@ -92,23 +92,21 @@ class RegisterUser(generic.TemplateView):
     template_name = 'products/register.html'
 
     def post(self, request, *args, **kwargs):
-        form = RegisterUserForm(request.POST)
-        profile_form = UserProfileForm(request.POST)
-        if form.is_valid() and profile_form.is_valid():
+        form = RegisterUserForm(request.POST, request.FILES)
+        if form.is_valid():
 
             user = form.save(request)
-            profile = profile_form.save(commit = False)
-            profile.user = user
-            profile.save(request)
+            # profile = profile_form.save(commit = False)
+            # profile.user = user
+            # profile.save(request)
             login(request, user)
             return HttpResponseRedirect('/index')
         else:
-            return render(request, self.template_name, {'form': form, 'profile_form': profile_form})
+            return render(request, self.template_name, {'form': form})
 
     def get(self, request, *args, **kwargs):
         form = RegisterUserForm()
-        profile_form = UserProfileForm()
-        return render(request, self.template_name, {'form': form, 'profile_form': profile_form})
+        return render(request, self.template_name, {'form': form})
 
 
 class LoginView(generic.TemplateView):
