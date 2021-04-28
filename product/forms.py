@@ -49,7 +49,7 @@ class RegisterUserForm(UserCreationForm):
     last_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'noms',
                                                                'class': 'fadeIn second'}))
 
-    image = forms.FileField(required=True)
+    image = forms.ImageField(required=True)
 
     password1 = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Mot de passe',
                                                                'class': 'fadeIn fourth'}))
@@ -70,21 +70,16 @@ class RegisterUserForm(UserCreationForm):
 
         if commit:
             user.save()
-            profile = Profile(user=user)
-            image_to_binary = self.cleaned_data["image"].file.read()
-            profile.image = image_to_binary
-            profile.save()
+            try:
+                profile = Profile(user=user)
+                # image_to_binary =
+                profile.image = self.cleaned_data["image"]
+                profile.save()
+            except:
+                user.delete()
+                return False
+
         return user
 
-
-
-# #
-#     def save(self, commit=True):
-#         user_image = super(RegisterImageUserForm, self).save(commit=False)
-#         user_image.image = self.cleaned_data["email"]
-#
-#         if commit:
-#             user.save()
-#         return user
 
 

@@ -99,7 +99,11 @@ class RegisterUser(generic.TemplateView):
             # profile = profile_form.save(commit = False)
             # profile.user = user
             # profile.save(request)
-            login(request, user)
+            if user is False:
+                info = "Erreur lors de l'upload de l'image"
+                return render(request, self.template_name, {'form': form, 'info': info})
+            else:
+                login(request, user)
             return HttpResponseRedirect('/index')
         else:
             return render(request, self.template_name, {'form': form})
@@ -152,12 +156,14 @@ class DashboardUser(generic.TemplateView):
     template_name = 'products/dashboardUser.html'
 
     @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        user_product_save = {}
-        user_product_save['result'] = get_product_save_user(request.user)
-        user_product_save['user'] = request.user
-        # return super().dispatch(*args, **kwargs)
-        return render(request, self.template_name, user_product_save)
+    def get(self, request, *args, **kwargs):
+        user = {}
+        user['user'] = request.user
+        # user_product_save = {}
+        # user_product_save['result'] = get_product_save_user(request.user)
+        # user_product_save['user'] = request.user
+        # # return super().dispatch(*args, **kwargs)
+        return render(request, self.template_name, user)
 
 
 class SaveProduct(View):

@@ -1,28 +1,49 @@
 {% block header %}
     {% load static %}
 
-<header class="masthead header_result sidebar">
-    {% if initial_product.image_product %}
-        <img class="img_header" src="{{ initial_product.image_product }}">
+
+    {% if request.get_full_path == "/index/" or request.get_full_path == "/legal/" %}
+        <header class="masthead sidebar indextoto">
+    {% elif request.get_full_path == "/accounts/dashboard/" and user.profile.image %}
+        <header class="masthead masthead_product sidebar"
+                style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url({{ user.profile.image.url }});">
+
+    {% elif request.get_full_path == "/results/" and initial_product.image_product %}
+        <header class="masthead masthead_product sidebar"
+                style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url({{ initial_product.image_product }});">
     {% else %}
-        <img class="img_header" src="{% static 'product/img/olenka-kotyk-eqsEZNCm4-c-unsplash.jpg' %}">
+        <header class="masthead sidebar indextosdsdsdto">
     {% endif %}
 
-    <div class="container h-100">
-        <div class="row h-100 align-items-center justify-content-center text-center">
+<div class="container h-100">
+    <div class="row h-100 align-items-center justify-content-center text-center">
 
-            <div class="col-lg-10">
-                <h1 class="text-uppercase text-white font-weight-bold">
-                    {% if initial_product %}
-                        {{ initial_product.name }}
-                    {% else %}
-                        Aucun produit trouvé
-                    {% endif %}
-                </h1>
-                <hr class="divider my-4"/>
-            </div>
+        <div class="col-lg-10">
+            <h1 class="text-uppercase text-white font-weight-bold">
+                {% if request.get_full_path == "/index/" %}
+                    Du gras oui, mais de qualité
+                {% elif request.get_full_path == "/legal/" %}
+                    Mentions Légales
+                {% elif request.get_full_path == "/accounts/dashboard/" %}
+                    Bonjour {{ user.first_name }}
+                {% elif request.get_full_path == "/results/" and initial_product %}
+                    {{ initial_product.name }}
+                {% elif request.get_full_path == "/results/" and info %}
+                    {{ info }}
+                {% elif request.get_full_path == "/accounts/products/" %}
+                    Bonjour {{ user.first_name }}
+                {% endif %}
+            </h1>
+            <hr class="divider my-4"/>
+            <h4 class="text-white-75 font-weight-light mb-5">
+                {% if request.get_full_path == "/index/" %}
+                    Trouvez un produit de substitution pour ceux que vous consommez tous les jours
+                {% elif request.get_full_path == "/accounts/products/" %}
+                    Voici vos produits sauvegardé
+                {% endif %}
+            </h4>
         </div>
     </div>
+</div>
 </header>
-
 {% endblock %}
