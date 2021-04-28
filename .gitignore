@@ -7,5 +7,5 @@ config/config.ini
 .coverage
 
 geckodriver.log
-
+*.json
 *.ini
