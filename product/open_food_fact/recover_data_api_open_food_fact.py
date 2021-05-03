@@ -2,7 +2,7 @@ import sys
 
 import requests
 
-from tools import config, logger
+from tools import logger
 
 
 class RecoverApi:
@@ -28,7 +28,7 @@ class RecoverApi:
         try:
             page = 1
             list_list_product = []
-            number_product = int(config['API_OFF']['max_product_by_category'])
+            number_product = int(os.environ.get('max_product_by_category'))
             # loop_continue = True
             # while len(list_list_product) <= number_product:
             while True:

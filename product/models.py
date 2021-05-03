@@ -21,9 +21,7 @@ from django.conf import settings
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # image = models.BinaryField(null=True)
     image = models.ImageField(null=True)
-    # name_animals = models.CharField(max_length=255, null=True)
 
 
 # @receiver(post_save, sender=User)
