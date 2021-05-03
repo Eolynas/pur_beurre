@@ -2,8 +2,8 @@
     {% load static %}
 
 
-    {% if request.get_full_path == "/index/" or request.get_full_path == "/legal/" %}
-        <header class="masthead sidebar indextoto">
+    {% if request.get_full_path == "/index/" or request.get_full_path == "/legal/" or request.get_full_path == "/" %}
+        <header class="masthead sidebar">
     {% elif request.get_full_path == "/accounts/dashboard/" and user.profile.image %}
         <header class="masthead masthead_product sidebar"
                 style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url({{ user.profile.image.url }});">
@@ -20,7 +20,7 @@
 
         <div class="col-lg-10">
             <h1 class="text-uppercase text-white font-weight-bold">
-                {% if request.get_full_path == "/index/" %}
+                {% if request.get_full_path == "/index/" or request.get_full_path == "/" %}
                     Du gras oui, mais de qualité
                 {% elif request.get_full_path == "/legal/" %}
                     Mentions Légales
@@ -36,10 +36,10 @@
             </h1>
             <hr class="divider my-4"/>
             <h4 class="text-white-75 font-weight-light mb-5">
-                {% if request.get_full_path == "/index/" %}
+                {% if request.get_full_path == "/index/" or request.get_full_path == "/" %}
                     Trouvez un produit de substitution pour ceux que vous consommez tous les jours
-                {% elif request.get_full_path == "/accounts/products/" %}
-                    Voici vos produits sauvegardé
+{#                {% elif request.get_full_path == "/accounts/products/" %}#}
+{#                    Voici vos produits sauvegardé#}
                 {% endif %}
             </h4>
         </div>
