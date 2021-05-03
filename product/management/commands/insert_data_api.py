@@ -4,6 +4,7 @@ from product.open_food_fact import recover_data_api_open_food_fact
 # from tools import config_manager, logger
 from tools import logger
 from product.models import bulk_insert_product_category
+import os
 
 
 class Command(BaseCommand):
