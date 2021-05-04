@@ -2,8 +2,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from product.models import Profile
-import io
 
 
 class SearchProduct(forms.Form):
@@ -81,6 +81,15 @@ class RegisterUserForm(UserCreationForm):
                 return False
 
         return user
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image', False)
+        if image:
+            if image.size/1000000 > 2:
+                raise ValidationError("Image trop large (>2mb)")
+            return image
+        else:
+            raise ValidationError("Couldn't read uploaded image")
 
 
 
