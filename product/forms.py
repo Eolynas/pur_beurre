@@ -73,7 +73,8 @@ class RegisterUserForm(UserCreationForm):
             try:
                 profile = Profile(user=user)
                 # image_to_binary =
-                profile.image = self.cleaned_data["image"]
+                # profile.image = self.cleaned_data["image"]
+                profile.image = self.cleaned_data["image"].file.read()
                 profile.save()
             except:
                 user.delete()

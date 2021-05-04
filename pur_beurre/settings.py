@@ -170,5 +170,5 @@ if os.environ.get('ENV') == 'PRODUCTION':
     DATABASES['default'].update(db_from_env)
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-_locale._getdefaultlocale = (lambda *args: ['en_US', 'utf8'])
+_locale._getdefaultlocale = (lambda *args: ['fr', 'utf8'])
 

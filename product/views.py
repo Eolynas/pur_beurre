@@ -12,6 +12,9 @@ from django.http import JsonResponse
 from .forms import SearchProduct, RegisterUserForm, SearchProductNavBar
 from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, get_all_name_products, save_product_for_user, get_product_save_user
 
+from PIL import Image
+import io
+from base64 import b64encode
 
 class Index(View):
     """
@@ -159,10 +162,9 @@ class DashboardUser(generic.TemplateView):
     def get(self, request, *args, **kwargs):
         user = {}
         user['user'] = request.user
-        # user_product_save = {}
-        # user_product_save['result'] = get_product_save_user(request.user)
-        # user_product_save['user'] = request.user
-        # # return super().dispatch(*args, **kwargs)
+        # imageStream = io.BytesIO(request.user.profile.image)
+
+        user['image'] = b64encode(request.user.profile.image).decode('ascii')
         return render(request, self.template_name, user)
 
 

@@ -21,7 +21,8 @@ from django.conf import settings
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(null=True)
+    # image = models.ImageField(null=True)
+    image = models.BinaryField(null=True)
 
 
 # @receiver(post_save, sender=User)
