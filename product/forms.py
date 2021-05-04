@@ -49,7 +49,7 @@ class RegisterUserForm(UserCreationForm):
     last_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'noms',
                                                                'class': 'fadeIn second'}))
 
-    image = forms.ImageField(required=True)
+    image = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'image_form'}))
 
     password1 = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Mot de passe',
                                                                'class': 'fadeIn fourth'}))

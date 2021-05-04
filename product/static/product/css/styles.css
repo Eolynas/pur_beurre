@@ -10962,3 +10962,22 @@ header.masthead h1 {
     width: 200px;
     /*height: 200px;*/
 }
+/*.image_form {*/
+/*    color: red;*/
+/*}*/
+/*.image_form > input {*/
+/*    display: none;*/
+/*}*/
+
+/*.image_form > label {*/
+/*    font-size: 1.25em;*/
+/*    font-weight: 700;*/
+/*    color: white;*/
+/*    background-color: black;*/
+/*    display: inline-block;*/
+/*}*/
+
+/*.image_form:focus + label,*/
+/*.image_form + label:hover {*/
+/*    background-color: red;*/
+/*}*/
