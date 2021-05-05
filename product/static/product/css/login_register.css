@@ -302,5 +302,5 @@ input[type=text]::placeholder, input[type=password]::placeholder {
 }
 
 .image_form > input {
-    display: none;
+    /*display: none;*/
 }

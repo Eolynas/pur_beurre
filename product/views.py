@@ -160,12 +160,20 @@ class DashboardUser(generic.TemplateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
-        user = {}
-        user['user'] = request.user
+        form_navbar = SearchProductNavBar
+        # user = {}
+        # user['user'] = request.user
         # imageStream = io.BytesIO(request.user.profile.image)
+        image = None
 
-        user['image'] = b64encode(request.user.profile.image).decode('ascii')
-        return render(request, self.template_name, user)
+        if request.user.profile.image:
+            # user['image'] = b64encode(request.user.profile.image).decode('ascii')
+            image = b64encode(request.user.profile.image).decode('ascii')
+        # return render(request, self.template_name, user)
+        header = {'h1': 'Bonjour', 'h4': 'ca va'}
+        return render(request, self.template_name, {'user': request.user,
+                                                    'image': image,
+                                                    'form_navbar': form_navbar})
 
 
 class SaveProduct(View):
