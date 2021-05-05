@@ -11,29 +11,10 @@ from django.dispatch import receiver
 from django.conf import settings
 
 
-# class UserProfil(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     image = models.ImageField(null=True)
-#
-#     def __str__(self):
-#         return "%s's profile" % self.user
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # image = models.ImageField(null=True)
     image = models.BinaryField(null=True)
-
-
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         Profile.objects.create(user=instance)
-#
-#
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.profile.save()
 
 
 class Category(models.Model):
@@ -62,45 +43,6 @@ def delete_all_data_in_tables():
     Product.objects.all().delete()
     Category.objects.all().delete()
     logger.info("Toutes les données ont étaient éffacés")
-
-    # def bulk_insert_product_category():
-    #     """
-    #     insert all product and ur categories
-    #     """
-    #     # Creation de deux objet (product & category) pour bulk insert
-    #
-    #     p1 = Product.objects.create(name="Pizza fromage",
-    #                                 image_product="https://image.fr",
-    #                                 stores="OpenClassrooms",
-    #                                 url=None,
-    #                                 nutriscore="D",
-    #                                 image_reperes_nutrionnels="https://image_repere.fr")
-    #
-    #     p1.save()
-    #     c1 = Category.objects.create(name='Pizza')
-    #     c1.save()
-    #     p1.category.add(c1)
-    #     c2 = Category.objects.create(name='Fromage')
-    #     c2.save()
-    #     p1.category.add(c2)
-    #
-    #     get = Product.objects.filter(pk=221)
-    #     print(get)
-
-    """
-    AttributeError: 'function' object has no attribute 'value'
->>> Category.objects.filter(product__name='Pizza fromage').all.values()
-Traceback (most recent call last):
-  File "<console>", line 1, in <module>
-AttributeError: 'function' object has no attribute 'values'
->>> Category.objects.filter(product__name='Pizza fromage').all().value()
-Traceback (most recent call last):
-  File "<console>", line 1, in <module>
-AttributeError: 'QuerySet' object has no attribute 'value'
->>> Category.objects.filter(product__name='Pizza fromage').all().values()
-<QuerySet [{'id': 312, 'name': 'Pizza'}, {'id': 313, 'name': 'Fromage'}]>
-
-    """
 
 
 def bulk_insert_product_category(list_product: list):
