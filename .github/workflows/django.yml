@@ -28,6 +28,7 @@ jobs:
           pip install -r requirements.txt
       - name: Run Tests
         run: |
-          python manage.py test
+          python manage.py test product --pattern="*_views.py"
+
         env:
           ENV: GITHUB
