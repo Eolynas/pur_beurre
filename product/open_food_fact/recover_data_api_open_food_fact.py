@@ -5,6 +5,7 @@ import requests
 from tools import logger
 import os
 
+
 class RecoverApi:
     """
     request for get apî data
@@ -16,28 +17,14 @@ class RecoverApi:
         :param category: list: category
         :return: json: product list
         """
-        params = {
-            "action": "process",
-            "json": 1,
-            "tagtype_0": "categories",
-            "tag_contains_0": "contains",
-            "tag_0": category,
-            "page_size": 20
-        }
-
         try:
             page = 1
             list_list_product = []
-            number_product = int(os.environ.get('max_product_by_category'))
-            # loop_continue = True
-            # while len(list_list_product) <= number_product:
             while True:
                 query = requests.get(f'https://fr.openfoodfacts.org/category/{category}.json?page={page}').json()
                 if int(query['count']) == 0:
                     logger.info(f"Aucune données dans l'API pour la catégory {category}")
                     return list_list_product
-                # elif int(query['count']) < int(config['API_OFF']['max_product_by_category']):
-                #     number_product = int(query['count'])
 
                 for product in query['products']:
                     product_list = {}

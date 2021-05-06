@@ -1,3 +1,4 @@
+""" Test with selenium"""
 import time
 
 from django.contrib.auth.models import User
@@ -6,6 +7,9 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 
 class MySeleniumTests(StaticLiveServerTestCase):
+    """
+    Class for test with Selenium
+    """
 
     @classmethod
     def setUpClass(cls):
@@ -15,6 +19,9 @@ class MySeleniumTests(StaticLiveServerTestCase):
         cls.user = User.objects.create_user(username='TestUser', password="Testpassword!")
 
     def test_login(self):
+        """
+        test login views with selenium
+        """
         self.selenium.get("http://127.0.0.1:8000/accounts/login/")
         self.selenium.find_element_by_id('id_username').send_keys("TestUser")
         self.selenium.find_element_by_id('id_password').send_keys("Testpassword!")

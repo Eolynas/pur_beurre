@@ -7,10 +7,9 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.http import JsonResponse
 
-from .forms import SearchProduct, RegisterUserForm, SearchProductNavBar
-from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, save_product_for_user, get_product_save_user
+from product.forms import SearchProduct, RegisterUserForm, SearchProductNavBar
+from product.models import get_product_by_id, get_subsitut_for_product, save_product_for_user, get_product_save_user
 
 from PIL import Image
 import io
@@ -26,6 +25,9 @@ class Index(View):
     form_navbar = SearchProductNavBar
 
     def get(self, request):
+        """
+        get in home page
+        """
 
         header = {'h1': 'Du gras oui, mais de qualité',
                   'h4': 'Trouvez un produit de substitution pour ceux que vous consommez tous les jours'}
@@ -42,6 +44,9 @@ class Legal(View):
     form_navbar = SearchProductNavBar
 
     def get(self, request):
+        """
+        get in legal page
+        """
         header = {'h1': 'Mentions légales'}
         return render(request, self.template_name, {'header': header,
                                                     'form_navbar': self.form_navbar})
@@ -54,6 +59,9 @@ class ProductInfo(generic.TemplateView):
     template_name = 'products/product.html'
 
     def get(self, request, **kwargs):
+        """
+        get in product page
+        """
         product = get_product_by_id(kwargs['id_product'])
         form_navbar = SearchProductNavBar
         if product:
@@ -67,7 +75,7 @@ class ProductInfo(generic.TemplateView):
                                                     'form_navbar': form_navbar})
 
 
-class Result(generic.FormView, generic.TemplateView):
+class Result(generic.TemplateView):
     """
     view for url after research
     """
@@ -76,6 +84,9 @@ class Result(generic.FormView, generic.TemplateView):
     form_class = SearchProduct
 
     def post(self, request, *args, **kwargs):
+        """
+        post in result page
+        """
         form = self.form_class(request.POST)
         substitute_products = {}
         if form.is_valid():
@@ -112,6 +123,9 @@ class RegisterUser(generic.TemplateView):
     template_name = 'products/register.html'
 
     def post(self, request, *args, **kwargs):
+        """
+        post in register page (after submit)
+        """
         form = RegisterUserForm(request.POST, request.FILES)
         if form.is_valid():
 
@@ -119,13 +133,15 @@ class RegisterUser(generic.TemplateView):
             if user is False:
                 info = "Erreur lors de l'upload de l'image"
                 return render(request, self.template_name, {'form': form, 'info': info})
-            else:
-                login(request, user)
+            login(request, user)
             return HttpResponseRedirect('/index')
-        else:
-            return render(request, self.template_name, {'form': form})
+
+        return render(request, self.template_name, {'form': form})
 
     def get(self, request, *args, **kwargs):
+        """
+        get in result page (before submit)
+        """
         form = RegisterUserForm()
         return render(request, self.template_name, {'form': form})
 
@@ -138,10 +154,16 @@ class LoginView(generic.TemplateView):
     template_name = 'products/login.html'
 
     def get(self, request, *args, **kwargs):
+        """
+        get in login page (before login)
+        """
         form = AuthenticationForm()
         return render(request, self.template_name, context={"form": form})
 
     def post(self, request, **kwargs):
+        """
+        get in login page (after submit login)
+        """
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
             username = request.POST.get('username', False)
@@ -161,6 +183,9 @@ class LogoutView(generic.RedirectView):
     """
 
     def get(self, request, *args, **kwargs):
+        """
+        get in logout page
+        """
         logout(request)
         return HttpResponseRedirect('/')
 
@@ -174,6 +199,9 @@ class DashboardUser(generic.TemplateView):
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
+        """
+        get in dashboard page
+        """
         form_navbar = SearchProductNavBar
         image = None
         header = {'h1': f"Bonjour {request.user.first_name}"}
@@ -196,10 +224,12 @@ class SaveProduct(View):
     """
     save product by user
     """
-    # template_name = 'products/dashboardUser.html'
 
     @method_decorator(login_required(login_url='/accounts/login/'))
     def dispatch(self, request, *args, **kwargs):
+        """
+        post in login page
+        """
 
         product_id = request.POST['product_id']
 
@@ -218,14 +248,16 @@ class MyProducts(generic.TemplateView):
 
     @method_decorator(login_required(login_url='/accounts/login/'))
     def get(self, request, *args, **kwargs):
+        """
+        get in product page
+        """
         form_navbar = SearchProductNavBar
         save_product_by_user = get_product_save_user(request.user)
-        # product_id = request.POST['product_id']
-        # result = save_product_for_user(product_id, user=request.user)
-        # print(result)
 
+        header = {'h1': 'Vos produits sauvegardé'}
         return render(request, self.template_name, {'substitut_products': save_product_by_user,
                                                     'myproduct': True,
+                                                    'header': header,
                                                     'user': request.user,
                                                     'form_navbar': form_navbar})
 

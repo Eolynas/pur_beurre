@@ -1,31 +1,32 @@
 """ Models postgres"""
 from typing import Union, Tuple
 
+from django.contrib.auth.models import User
 from django.db import models
 
 from tools import logger
-from random import choice
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.conf import settings
 
 
 class Profile(models.Model):
+    """
+    models profile for add user image
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # image = models.ImageField(null=True)
     image = models.BinaryField(null=True)
 
 
 class Category(models.Model):
+    """
+    models category for product
+    """
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
 
-    def __str__(self):
-        return self.name
-
 
 class Product(models.Model):
+    """
+    models product
+    """
     name = models.CharField(max_length=200, unique=True)
     image_product = models.CharField(max_length=255, null=True)
     stores = models.CharField(max_length=200, null=True)
@@ -35,11 +36,11 @@ class Product(models.Model):
     category = models.ManyToManyField(Category, related_name='products')
     user_save = models.ManyToManyField(User, related_name='user_save_products')
 
-    def __str__(self):
-        return self.name
-
 
 def delete_all_data_in_tables():
+    """
+    for delete table (use in developement only)
+    """
     Product.objects.all().delete()
     Category.objects.all().delete()
     logger.info("Toutes les données ont étaient éffacés")
@@ -75,8 +76,6 @@ def bulk_insert_product_category(list_product: list):
         product_obj.image_reperes_nutrionnels = product['image_reperes_nutrionnels']
         product_obj.save()
 
-        # Creation des categories
-        # categories_obj = []
         for category in product['categories_product']:
             categories_obj = []
             obj, created = Category.objects.get_or_create(
@@ -91,20 +90,6 @@ def bulk_insert_product_category(list_product: list):
     logger.info(f"il y a {number_product_insert} qui ont étaient inséré")
 
 
-def get_id_product_by_name(product_name: str) -> Union[int, None]:
-    """
-    get product with name
-    :param product_name: name product enter into search bar
-    :type product_name: str
-    """
-    query = Product.objects.filter(name__icontains=product_name).values().first()
-
-    if query is None:
-        return query
-    if query['id']:
-        return query['id']
-
-
 def get_product_by_id(id_product: int) -> Union[Product, None]:
     """
     get product with id
@@ -113,7 +98,7 @@ def get_product_by_id(id_product: int) -> Union[Product, None]:
     """
     try:
         int(id_product)
-    except ValueError as e:
+    except ValueError:
         return None
     query = Product.objects.filter(pk=id_product).first()
 
@@ -127,8 +112,6 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
     :return: product_initial_info.name: object product
     :return: choise_substitute_products: list object product
     """
-
-    # recovery of the product & categories sought by the user
     product_initial_info = Product.objects.filter(name__icontains=product).first()
     if not product_initial_info:
         return False
@@ -148,16 +131,6 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
     nbr_products_in_list = len(substitute_products)
 
     if nbr_products_in_list > 6:
-        # method to randomly choose 6 products
-        # choise_substitute_products = []
-        # for x in range(6):
-        #     choise = choice(substitute_products)
-        #     choise_substitute_products.append(choise)
-        #     substitute_products.remove(choise)
-        #
-        # print(choise_substitute_products)
-        #
-        # return product_initial_info, choise_substitute_products
         return product_initial_info, substitute_products[:6]
 
     return product_initial_info, substitute_products
@@ -167,14 +140,12 @@ def save_product_for_user(id_product: int, user: User):
     """
     Save product adding by user
     """
-    # product = get_product_by_id(id_product)
     product = get_product_by_id(id_product)
 
     if not product:
         return False
-    result = product.user_save.add(user)
+    product.user_save.add(user)
     product.save()
-
     return True
 
 
@@ -185,7 +156,6 @@ def get_product_save_user(user):
     user_product_save = Product.objects.filter(user_save=user.id).all()
 
     return user_product_save
-
 
 # def get_all_name_products():
 #     """

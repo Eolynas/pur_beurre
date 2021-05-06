@@ -1,9 +1,8 @@
+""" Test for views"""
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from django.db import models
 from product.models import Product, Category
-
 
 class TestViews(TestCase):
     """
@@ -18,45 +17,45 @@ class TestViews(TestCase):
         self.user_roger = User.objects.create_user('roger')
         self.user_roger.save()
 
-        c1 = Category.objects.create(name='Pizza')
-        c2 = Category.objects.create(name='Fromage')
-        c3 = Category.objects.create(name='Test')
-        c4 = Category.objects.create(name='Test_2')
+        add_category_1 = Category.objects.create(name='Pizza')
+        add_category_2 = Category.objects.create(name='Fromage')
+        add_category_3 = Category.objects.create(name='Test')
+        add_category_4 = Category.objects.create(name='Test_2')
 
-        p1 = Product.objects.create(name="Pizza test",
+        add_product_1 = Product.objects.create(name="Pizza test",
                                     image_product="https://image.fr",
                                     stores="OpenClassrooms",
                                     url=None,
                                     nutriscore="D",
                                     image_reperes_nutrionnels="https://image_repere.fr")
-        p1.save()
-        p1.category.add(c1, c3)
+        add_product_1.save()
+        add_product_1.category.add(add_category_1, add_category_3)
 
-        p2 = Product.objects.create(name="Pizza fromage",
+        add_product_2 = Product.objects.create(name="Pizza fromage",
                                     image_product="https://image.fr",
                                     stores="OpenClassrooms",
                                     url='https://masuperpizza.fr',
                                     nutriscore="C",
                                     image_reperes_nutrionnels="https://image_repere.fr")
 
-        p2.category.add(c1, c2, c3)
+        add_product_2.category.add(add_category_1, add_category_2, add_category_3)
 
-        p3 = Product.objects.create(name="Pizza fromage meilleur",
+        add_product_3 = Product.objects.create(name="Pizza fromage meilleur",
                                     image_product="https://image.fr",
                                     stores="OpenClassrooms",
                                     url='https://masuperpizza.fr',
                                     nutriscore="A",
                                     image_reperes_nutrionnels="https://image_repere.fr")
 
-        p3.category.add(c1, c2, c4)
+        add_product_3.category.add(add_category_1, add_category_2, add_category_4)
 
-        p4 = Product.objects.create(name="Pizza 5 fromage",
+        add_product_4 = Product.objects.create(name="Pizza 5 fromage",
                                     image_product="https://image.fr",
                                     stores="OpenClassrooms",
                                     url='https://masuperpizza.fr',
                                     nutriscore="A",
                                     image_reperes_nutrionnels="https://image_repere.fr")
-        p4.category.add(c1, c2, c4)
+        add_product_4.category.add(add_category_1, add_category_2, add_category_4)
 
     def test_index(self):
         """
@@ -72,7 +71,7 @@ class TestViews(TestCase):
 
         # Test display login / logout if user is authentificated
 
-        loggin_user = self.client.force_login(User.objects.get_or_create(username='testuser')[0])
+        self.client.force_login(User.objects.get_or_create(username='testuser')[0])
         response = self.client.get('')
         icon_log_out = "fa-sign-out-alt"
         icon_log_in = "fa-sign-in-alt"
@@ -179,7 +178,8 @@ class TestViews(TestCase):
                                     {'username': 'bob',
                                      'password': 'toto2020'}, follow=True)
         self.assertEqual(response.status_code, 200)
-        error_msg = "Saisissez un nom d’utilisateur et un mot de passe valides. Remarquez que chacun de ces champs est sensible à la casse (différenciation des majuscules/minuscules)"
+        error_msg = "Saisissez un nom d’utilisateur et un mot de passe valides. Remarquez que chacun " \
+                    "de ces champs est sensible à la casse (différenciation des majuscules/minuscules)"
         self.assertIn(error_msg, response.content.decode("utf-8"))
         self.assertTemplateUsed(response, 'products/login.html')
 
@@ -242,8 +242,3 @@ class TestViews(TestCase):
 
         response = self.client.post('/products/save/', {'product_id': 999})
         self.assertEqual(response.status_code, 404)
-
-
-
-
-

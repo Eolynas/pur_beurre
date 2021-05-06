@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+
 from product.models import Profile
 
 
@@ -29,40 +30,39 @@ class SearchProductNavBar(forms.Form):
                                   attrs={'placeholder': 'Chercher',
                                          'class': 'form-control mr-sm-2 search-product-navbar'}))
 
-    # def print_form(self):
-    #     print(self.cleaned_data)
-    #     return self.cleaned_data
-
 
 class RegisterUserForm(UserCreationForm):
     """
     form for signup new users
     """
-    # pseudo = forms.CharField(max_length=100)
-    # message = forms.CharField(widget=forms.Textarea)
     username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Pseudo',
-                                                              'class': 'fadeIn first'}))
+                                                                            'class': 'fadeIn first'}))
     email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Email',
-                                                           'class': 'fadeIn second'}))
+                                                                          'class': 'fadeIn second'}))
     first_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Prénom',
-                                                                'class': 'fadeIn third'}))
+                                                                               'class': 'fadeIn third'}))
     last_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'noms',
-                                                               'class': 'fadeIn second'}))
+                                                                              'class': 'fadeIn second'}))
 
     image = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'image_form'}))
 
     password1 = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Mot de passe',
-                                                               'class': 'fadeIn fourth'}))
-    password2 = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': 'saisissez de nouveau votre mot de passe',
-                                                               'class': 'fadeIn fourth'}))
-
-    # cc_myself = forms.BooleanField(required=False)
+                                                                                 'class': 'fadeIn fourth'}))
+    password2 = forms.CharField(required=True, widget=forms.PasswordInput(
+        attrs={'placeholder': 'saisissez de nouveau votre mot de passe',
+               'class': 'fadeIn fourth'}))
 
     class Meta:
+        """
+        Class meta
+        """
         model = User
         fields = ("username", "first_name", "last_name", "email", "image", "password1")
 
     def save(self, commit=True):
+        """
+        for save user with form register
+        """
         user = super(RegisterUserForm, self).save(commit=False)
         user.email = self.cleaned_data["email"]
         user.first_name = self.cleaned_data["first_name"]
@@ -83,11 +83,7 @@ class RegisterUserForm(UserCreationForm):
     def clean_image(self):
         image = self.cleaned_data.get('image', False)
         if image:
-            if image.size/1000000 > 2:
+            if image.size / 1000000 > 2:
                 raise ValidationError("Image trop large (>2mb)")
             return image
-        else:
-            raise ValidationError("Couldn't read uploaded image")
-
-
-
+        raise ValidationError("Couldn't read uploaded image")

@@ -1,5 +1,4 @@
 [API_OFF]
-max_product_by_category = NUMBER
 list_categories = STR
 
 ATTENTION pour la liste des categories il faut mettre le noms EXACT
