@@ -10887,6 +10887,13 @@ header.masthead h1 {
     enable-background: "new 0 0 512 512";
 }
 
+.info_supp_product_save {
+    font-size: 12px;
+    text-decoration: overline;
+    font-style: italic;
+    color: #c7c7c7;
+}
+
 .fa-thumbs-up, .fa-sign-out-alt, .fa-sign-in-alt, .fa-user-plus {
     font-size: 30px;
 }
@@ -10984,23 +10991,3 @@ header.masthead h1 {
     font-size: 50px;
     margin: 10px 0 20px 0;
 }
-
-/*.image_form {*/
-/*    color: red;*/
-/*}*/
-/*.image_form > input {*/
-/*    display: none;*/
-/*}*/
-
-/*.image_form > label {*/
-/*    font-size: 1.25em;*/
-/*    font-weight: 700;*/
-/*    color: white;*/
-/*    background-color: black;*/
-/*    display: inline-block;*/
-/*}*/
-
-/*.image_form:focus + label,*/
-/*.image_form + label:hover {*/
-/*    background-color: red;*/
-/*}*/

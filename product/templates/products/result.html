@@ -21,7 +21,6 @@
         </div>
     {% endif %}
     <div class="container py-5">
-        {# #TODO: BOUCLE PRODUCT   #}
 
             <div class="row text-center">
                 {% for product in substitut_products %}
@@ -36,17 +35,17 @@
 
                         <div>
                         {% if product in product_save_for_user %}
-                            <a href="#" class="btn btn-success btn-block p-2 shadow rounded-pill">
+                            <p class="btn-success btn-block p-2 shadow rounded-pill">
                                 Deja Sauvegarder
-                            </a>
+                            </p>
 
                         {% elif myproduct %}
 
-                            <button type="submit" class="btn btn-info btn-block p-2 shadow rounded-pill">
-                                Supprimé {{ product.id }}
-                                <br><span>Fonction non prise en charge</span>
+                            <p class="btn-info btn-block p-2 shadow rounded-pill">
+                                Supprimé
+                                <br><span class="info_supp_product_save">Fonction non prise en charge</span>
 
-                            </button>
+                            </p>
 
 
                         {% else %}
@@ -59,7 +58,7 @@
                                 <div>
                                     <button type="submit" class="btn btn-primary btn-block p-2 shadow rounded-pill">
                                         <i class="fa fa-save" aria-hidden="true"></i>
-                                        Sauvegarder {{ product.id }}
+                                        Sauvegarder
                                     </button>
                                 </div>
                                 <input type="hidden" id="postId" name="postId" value="34657">
