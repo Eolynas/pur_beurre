@@ -7,8 +7,7 @@ from product.models import bulk_insert_product_category, \
     Product, Category, \
     get_id_product_by_name, \
     get_product_by_id, \
-    get_subsitut_for_product, \
-    get_all_name_products
+    get_subsitut_for_product
 
 
 class TestProductApp(TestCase):

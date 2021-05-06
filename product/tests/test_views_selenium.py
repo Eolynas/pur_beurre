@@ -12,12 +12,12 @@ class MySeleniumTests(StaticLiveServerTestCase):
         super().setUpClass()
         cls.selenium = WebDriver()
         cls.selenium.implicitly_wait(10)
-        cls.user = User.objects.create_user(username='bob', password="seleniumtest")
+        cls.user = User.objects.create_user(username='TestUser', password="Testpassword!")
 
     def test_login(self):
         self.selenium.get("http://127.0.0.1:8000/accounts/login/")
-        self.selenium.find_element_by_id('id_username').send_keys("bob")
-        self.selenium.find_element_by_id('id_password').send_keys("seleniumtest")
+        self.selenium.find_element_by_id('id_username').send_keys("TestUser")
+        self.selenium.find_element_by_id('id_password').send_keys("Testpassword!")
         time.sleep(2)
         self.selenium.find_element_by_id('submit_login').click()
 

@@ -175,9 +175,6 @@ class DashboardUser(generic.TemplateView):
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         form_navbar = SearchProductNavBar
-        # user = {}
-        # user['user'] = request.user
-        # imageStream = io.BytesIO(request.user.profile.image)
         image = None
         header = {'h1': f"Bonjour {request.user.first_name}"}
         try:
