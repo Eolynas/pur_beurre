@@ -187,11 +187,11 @@ def get_product_save_user(user):
     return user_product_save
 
 
-def get_all_name_products():
-    """
-    get all name product for autocomplete
-    /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
-    """
-    print("stop")
-    all_products = Product.objects.all().values('name')
-    return all_products
+# def get_all_name_products():
+#     """
+#     get all name product for autocomplete
+#     /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
+#     """
+#     print("stop")
+#     all_products = Product.objects.all().values('name')
+#     return all_products

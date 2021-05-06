@@ -20,27 +20,11 @@
 
         <div class="col-lg-10">
             <h1 class="text-uppercase text-white font-weight-bold">
-                {% if request.get_full_path == "/index/" or request.get_full_path == "/" %}
-                    Du gras oui, mais de qualité
-                {% elif request.get_full_path == "/legal/" %}
-                    Mentions Légales
-                {% elif request.get_full_path == "/accounts/dashboard/" %}
-                    Bonjour {{ user.first_name }}
-                {% elif request.get_full_path == "/results/" and initial_product %}
-                    {{ initial_product.name }}
-                {% elif request.get_full_path == "/results/" and info %}
-                    {{ info }}
-                {% elif request.get_full_path == "/accounts/products/" %}
-                    Bonjour {{ user.first_name }}
-                {% endif %}
+                {{ header.h1 }}
             </h1>
             <hr class="divider my-4"/>
             <h4 class="text-white-75 font-weight-light mb-5">
-                {% if request.get_full_path == "/index/" or request.get_full_path == "/" %}
-                    Trouvez un produit de substitution pour ceux que vous consommez tous les jours
-{#                {% elif request.get_full_path == "/accounts/products/" %}#}
-{#                    Voici vos produits sauvegardé#}
-                {% endif %}
+                {{ header.h4 }}
             </h4>
         </div>
     </div>

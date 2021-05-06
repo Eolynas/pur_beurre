@@ -92,7 +92,6 @@ class TestViews(TestCase):
         """
         response = self.client.get('/legal/')
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Mention Legal', str(response.rendered_content))
 
         response = self.client.post('/legal/')
         self.assertEqual(response.status_code, 405)
@@ -117,7 +116,7 @@ class TestViews(TestCase):
         response = self.client.post('/results/', {'product': 'toto'})
         self.assertEqual(response.status_code, 200)
 
-        self.assertIn('Aucun produit', response.content.decode("utf-8"))
+        self.assertIn('produit non trouvé', response.content.decode("utf-8"))
 
     def test_register(self):
         """
@@ -214,7 +213,6 @@ class TestViews(TestCase):
 
         response = self.client.get("/products/232323/")
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Produit non trouvé', str(response.rendered_content))
 
     def test_logout(self):
         """
@@ -239,7 +237,13 @@ class TestViews(TestCase):
         response = self.client.post('/products/save/', {'product_id': product_test.id})
         self.assertEqual(response.status_code, 302)
 
-        response = self.client.post('/products/save/', {'product_id': 1})
+        response = self.client.get('/accounts/products/')
+        self.assertIn(product_test.name, str(response.content))
+
+        response = self.client.post('/products/save/', {'product_id': 999})
         self.assertEqual(response.status_code, 404)
+
+
+
 
 

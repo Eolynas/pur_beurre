@@ -29,9 +29,9 @@ class SearchProductNavBar(forms.Form):
                                   attrs={'placeholder': 'Chercher',
                                          'class': 'form-control mr-sm-2 search-product-navbar'}))
 
-    def print_form(self):
-        print(self.cleaned_data)
-        return self.cleaned_data
+    # def print_form(self):
+    #     print(self.cleaned_data)
+    #     return self.cleaned_data
 
 
 class RegisterUserForm(UserCreationForm):
@@ -72,8 +72,6 @@ class RegisterUserForm(UserCreationForm):
             user.save()
             try:
                 profile = Profile(user=user)
-                # image_to_binary =
-                # profile.image = self.cleaned_data["image"]
                 profile.image = self.cleaned_data["image"].file.read()
                 profile.save()
             except:
