@@ -11,8 +11,6 @@ from django.utils.decorators import method_decorator
 from product.forms import SearchProduct, RegisterUserForm, SearchProductNavBar
 from product.models import get_product_by_id, get_subsitut_for_product, save_product_for_user, get_product_save_user
 
-from PIL import Image
-import io
 from base64 import b64encode
 
 
