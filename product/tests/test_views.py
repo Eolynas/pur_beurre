@@ -1,8 +1,10 @@
 """ Test for views"""
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.urls import reverse
 
 from product.models import Product, Category
+
 
 class TestViews(TestCase):
     """
@@ -102,17 +104,17 @@ class TestViews(TestCase):
         - if method is get
         - if method is post -> check result
         """
-
-        response = self.client.get('/results/')
+        url_result = reverse('results')
+        response = self.client.get(url_result)
         self.assertEqual(response.status_code, 200)
 
         # form = SearchProduct(data={'product': 'Pizza test'})
-        response = self.client.post('/results/', {'product': 'Pizza test'})
+        response = self.client.post(url_result, {'product': 'Pizza test'})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'products/result.html')
         self.assertIn('Pizza fromage', response.content.decode("utf-8"))
 
-        response = self.client.post('/results/', {'product': 'toto'})
+        response = self.client.post(url_result, {'product': 'toto'})
         self.assertEqual(response.status_code, 200)
 
         self.assertIn('produit non trouvé', response.content.decode("utf-8"))
