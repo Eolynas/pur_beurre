@@ -2,9 +2,9 @@
     {% load static %}
 
 
-    {% if request.get_full_path == "/index/" or request.get_full_path == "/legal/" or request.get_full_path == "/" %}
-        <header class="masthead sidebar">
-    {% elif request.get_full_path == "/accounts/dashboard/" and image %}
+{#    {% if request.get_full_path == "/index/" or request.get_full_path == "/legal/" or request.get_full_path == "/" %}#}
+{#        <header class="masthead sidebar">#}
+    {% if request.get_full_path == "/accounts/dashboard/" and image %}
         <header class="masthead masthead_product sidebar"
                 style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url(data:;base64,{{ image }});">
 

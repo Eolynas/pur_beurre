@@ -195,7 +195,7 @@ class DashboardUser(generic.TemplateView):
     page my accompte
     """
 
-    template_name = 'products/dashboardUser.html'
+    template_name = 'products/dashboard_user.html'
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):

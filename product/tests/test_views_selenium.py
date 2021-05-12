@@ -2,10 +2,12 @@
 import time
 
 from django.contrib.auth.models import User
+from django.test import tag
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 
+@tag('selenium')
 class MySeleniumTests(StaticLiveServerTestCase):
     """
     Class for test with Selenium
