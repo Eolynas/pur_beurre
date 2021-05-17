@@ -78,13 +78,10 @@ def bulk_insert_product_category(list_product: list):
 
         for category in product['categories_product']:
             categories_obj = []
-            obj, created = Category.objects.get_or_create(
+            obj, _ = Category.objects.get_or_create(
                 name=category
             )
-            if obj:
-                categories_obj.append(obj)
-            elif created:
-                categories_obj.append(obj)
+            categories_obj.append(obj)
             product_obj.category.add(obj)
 
     logger.info(f"il y a {number_product_insert} qui ont étaient inséré")
@@ -97,12 +94,10 @@ def get_product_by_id(id_product: int) -> Union[Product, None]:
     :type product_name: int
     """
     try:
-        int(id_product)
-    except ValueError:
+        query = Product.objects.get(pk=id_product)
+        return query
+    except Product.DoesNotExist:
         return None
-    query = Product.objects.filter(pk=id_product).first()
-
-    return query
 
 
 def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
@@ -112,13 +107,14 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
     :return: product_initial_info.name: object product
     :return: choise_substitute_products: list object product
     """
+    max_substitute = 6
     product_initial_info = Product.objects.filter(name__icontains=product).first()
     if not product_initial_info:
         return False
     categories_at_product_initial = product_initial_info.category.all()
 
     substitute_products = []
-    for index, category in enumerate(categories_at_product_initial.all()):
+    for category in categories_at_product_initial.all():
         list_product_by_category = []
         products = category.products.all()
         for product in products:
@@ -130,8 +126,8 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
 
     nbr_products_in_list = len(substitute_products)
 
-    if nbr_products_in_list > 6:
-        return product_initial_info, substitute_products[:6]
+    if nbr_products_in_list > max_substitute:
+        return product_initial_info, substitute_products[:max_substitute]
 
     return product_initial_info, substitute_products
 
@@ -153,7 +149,7 @@ def get_product_save_user(user):
     """
     get all product save by user
     """
-    user_product_save = Product.objects.filter(user_save=user.id).all()
+    user_product_save = user.user_save_products.all()
 
     return user_product_save
 
