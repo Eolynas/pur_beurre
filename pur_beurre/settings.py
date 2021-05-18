@@ -43,6 +43,7 @@ SESSION_COOKIE_SECURE = False
 
 INSTALLED_APPS = [
     'product.apps.ProductConfig',
+    'user.apps.UserConfig',
     'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',

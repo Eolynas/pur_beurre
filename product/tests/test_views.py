@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from product.models import Product, Category
+from user.models import Profile
 
 
 class TestViews(TestCase):
@@ -131,7 +132,7 @@ class TestViews(TestCase):
         response = self.client.get('/accounts/register/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('form', str(response.content))
-        self.assertTemplateUsed(response, 'products/register.html')
+        self.assertTemplateUsed(response, 'user/register.html')
 
         response = self.client.post('/accounts/register/',
                                     {'username': 'Eddy',
@@ -148,7 +149,7 @@ class TestViews(TestCase):
                                      'password1': ':mdp202020',
                                      'password2': ':mdp202029'}, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'products/register.html')
+        self.assertTemplateUsed(response, 'user/register.html')
 
     def test_login_view(self):
         """
@@ -162,7 +163,7 @@ class TestViews(TestCase):
         response = self.client.get('/accounts/login/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('form', str(response.content))
-        self.assertTemplateUsed(response, 'products/login.html')
+        self.assertTemplateUsed(response, 'user/login.html')
 
         # ----------- POST ----------- #
 
@@ -183,7 +184,7 @@ class TestViews(TestCase):
         error_msg = "Saisissez un nom d’utilisateur et un mot de passe valides. Remarquez que chacun " \
                     "de ces champs est sensible à la casse (différenciation des majuscules/minuscules)"
         self.assertIn(error_msg, response.content.decode("utf-8"))
-        self.assertTemplateUsed(response, 'products/login.html')
+        self.assertTemplateUsed(response, 'user/login.html')
 
     def test_dashboard_user(self):
         """
