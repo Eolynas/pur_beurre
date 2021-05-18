@@ -15,7 +15,7 @@ class Command(BaseCommand):
         - run methode for get data in api open food fact
         - insert data api in table db
         """
-        list_categories = os.environ.get('list_categories').split(",")
+        list_categories = os.environ.get('LIST_CATEGORIES').split(",")
         recover_api = recover_data_api_open_food_fact.RecoverApi()
         for category in list_categories:
             category = category.strip()

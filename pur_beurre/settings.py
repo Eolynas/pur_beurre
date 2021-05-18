@@ -106,8 +106,7 @@ else:
                 'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
                 'NAME': 'pur_beurre', # le nom de notre base de donnees creee precedemment
                 'USER': 'postgres', # attention : remplacez par votre nom d'utilisateur
-                # 'PASSWORD': os.environ.get("db_pswd"),
-                'PASSWORD': '0311',
+                'PASSWORD': os.environ.get("DB_PWSD"),
                 'HOST': 'localhost',
                 'PORT': '5432',
             }
