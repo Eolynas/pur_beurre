@@ -281,17 +281,13 @@ input[type=text]::placeholder, input[type=password]::placeholder {
 }
 
 .image_form {
-    background-color: #989898;
-    border: none;
-    color: #efefef;
     padding: 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     margin: 5px;
-    width: 65%;
-    border: 2px solid #262626;
+    width: 75%;
     -webkit-transition: all 0.5s ease-in-out;
     -moz-transition: all 0.5s ease-in-out;
     -ms-transition: all 0.5s ease-in-out;
@@ -302,5 +298,5 @@ input[type=text]::placeholder, input[type=password]::placeholder {
 }
 
 .image_form > input {
-    /*display: none;*/
+    display: none;
 }

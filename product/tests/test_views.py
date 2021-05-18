@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from product.models import Product, Category
+from user.models import Profile
 
 
 class TestViews(TestCase):
@@ -119,88 +120,6 @@ class TestViews(TestCase):
 
         self.assertIn('produit non trouvé', response.content.decode("utf-8"))
 
-    def test_register(self):
-        """
-        Test RegisterUser (/accounts/login/)
-        - status_code (200)
-        - if method is get -> display form
-        - if method is post -> valid login
-        - if method is post -> error login
-        - test template
-        """
-        response = self.client.get('/accounts/register/')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('form', str(response.content))
-        self.assertTemplateUsed(response, 'products/register.html')
-
-        response = self.client.post('/accounts/register/',
-                                    {'username': 'Eddy',
-                                     'first_name': 'Eddy',
-                                     'email': 'edddd@yahoo.fr',
-                                     'password1': ':mdp202020',
-                                     'password2': ':mdp202020'}, follow=True)
-        self.assertEqual(response.status_code, 200)
-        # ----------- ERROR ----------- #
-        response = self.client.post('/accounts/register/',
-                                    {'username': 'Eddy-Test',
-                                     'first_name': 'Eddy',
-                                     'email': 'eddddy@yahoo.fr',
-                                     'password1': ':mdp202020',
-                                     'password2': ':mdp202029'}, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'products/register.html')
-
-    def test_login_view(self):
-        """
-        Test RegisterUser (/accounts/login/)
-        - status_code (200)
-        - if method is get -> display form
-        - if method is post -> valid login
-        - if method is post -> error login
-        """
-        # ----------- GET ----------- #
-        response = self.client.get('/accounts/login/')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('form', str(response.content))
-        self.assertTemplateUsed(response, 'products/login.html')
-
-        # ----------- POST ----------- #
-
-        response = self.client.post('/accounts/login/',
-                                    {'username': 'bob',
-                                     'password': 'toto2021'}, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('Bonjour bob', str(response.content))
-        self.assertTemplateUsed(response, 'products/index.html')
-
-        # ----------- ERROR ----------- #
-
-        # Error password
-        response = self.client.post('/accounts/login/',
-                                    {'username': 'bob',
-                                     'password': 'toto2020'}, follow=True)
-        self.assertEqual(response.status_code, 200)
-        error_msg = "Saisissez un nom d’utilisateur et un mot de passe valides. Remarquez que chacun " \
-                    "de ces champs est sensible à la casse (différenciation des majuscules/minuscules)"
-        self.assertIn(error_msg, response.content.decode("utf-8"))
-        self.assertTemplateUsed(response, 'products/login.html')
-
-    def test_dashboard_user(self):
-        """
-        Test RegisterUser (/accounts/login/)
-        - status_code (200)
-        - if method is get -> not authenticated
-        - if method is get -> authenticated
-        """
-        # ----------- GET NOT AUTHENTIFICATED ----------- #
-        response = self.client.get('/accounts/dashboard/')
-        self.assertEqual(response.status_code, 302)
-
-        # ----------- GET AUTHENTIFICATED ----------- #
-        self.client.force_login(User.objects.get_or_create(username='roger')[0])
-        response = self.client.get('/accounts/dashboard/')
-        # self.assertEqual(response.status_code, 200)
-
     def test_product_info(self):
         """
         Test page product info
@@ -215,14 +134,6 @@ class TestViews(TestCase):
 
         response = self.client.get("/products/232323/")
         self.assertEqual(response.status_code, 200)
-
-    def test_logout(self):
-        """
-        Test logout
-        """
-        self.client.force_login(User.objects.get_or_create(username='bob')[0])
-        response = self.client.get('/accounts/logout/')
-        self.assertEqual(response.status_code, 302)
 
     def test_save_product(self):
         """
