@@ -42,8 +42,6 @@ def bulk_insert_product_category(list_product: list):
     """
     insert all product and ur categories
     """
-    # Creation de deux objet (product & category) pour bulk insert
-
     logger.info(f"Il y a {len(list_product)} produit")
     number_product_insert = 0
     number_product_update = 0
