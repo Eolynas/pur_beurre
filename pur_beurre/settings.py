@@ -106,7 +106,7 @@ else:
                 'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
                 'NAME': 'pur_beurre', # le nom de notre base de donnees creee precedemment
                 'USER': 'postgres', # attention : remplacez par votre nom d'utilisateur
-                'PASSWORD': os.environ.get("DB_PWSD"),
+                'PASSWORD': '0311',
                 'HOST': 'localhost',
                 'PORT': '5432',
             }
@@ -158,7 +158,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = 'index'
-AUTH_PROFILE_MODULE = 'product.Profile'
+# AUTH_PROFILE_MODULE = 'product.Profile'
 
 if os.environ.get('ENV') == 'PRODUCTION':
 
@@ -176,4 +176,3 @@ if os.environ.get('ENV') == 'PRODUCTION':
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 _locale._getdefaultlocale = (lambda *args: ['fr', 'utf8'])
-

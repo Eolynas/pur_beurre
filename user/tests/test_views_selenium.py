@@ -18,12 +18,13 @@ class MySeleniumTests(StaticLiveServerTestCase):
         super().setUpClass()
         cls.selenium = WebDriver()
         cls.selenium.implicitly_wait(10)
-        cls.user = User.objects.create_user(username='TestUser', password="Testpassword!")
+        cls.user = User.objects.create_user(username='TestUser', password="Testpassword!", is_active=True)
 
     def test_login(self):
         """
         test login views with selenium
         """
+        print(User.objects.get(username='TestUser'))
         self.selenium.get("http://127.0.0.1:8000/accounts/login/")
         self.selenium.find_element_by_id('id_username').send_keys("TestUser")
         self.selenium.find_element_by_id('id_password').send_keys("Testpassword!")

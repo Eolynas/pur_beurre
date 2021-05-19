@@ -64,7 +64,8 @@ class LoginView(generic.TemplateView):
         """
         get in login page (after submit login)
         """
-        form = AuthenticationForm(request, request.POST)
+        form = AuthenticationForm(request, data=request.POST)
+        # form = AuthenticationForm(request)
         if form.is_valid():
             username = request.POST.get('username', False)
             password = request.POST.get('password', False)

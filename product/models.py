@@ -24,7 +24,7 @@ class Product(models.Model):
     stores = models.CharField(max_length=200, null=True)
     url = models.CharField(max_length=255, null=True)
     nutriscore = models.CharField(max_length=20, null=True)
-    image_reperes_nutrionnels = models.CharField(max_length=255, null=True)
+    image_nutrient_benchmarks = models.CharField(max_length=255, null=True)
     category = models.ManyToManyField(Category, related_name='products')
     user_save = models.ManyToManyField(User, related_name='user_save_products')
 
@@ -56,14 +56,14 @@ def bulk_insert_product_category(list_product: list):
                 not product_obj.stores == product['stores'] and \
                 not product_obj.url == product['url'] and \
                 not product_obj.nutriscore == product['nutriscore'] and \
-                not product_obj.image_reperes_nutrionnels == product['image_reperes_nutrionnels']:
+                not product_obj.image_nutrient_benchmarks == product['image_reperes_nutrionnels']:
             number_product_update += 1
 
         product_obj.image_product = product['image_product']
         product_obj.stores = product['stores']
         product_obj.url = product['url']
         product_obj.nutriscore = product['nutriscore']
-        product_obj.image_reperes_nutrionnels = product['image_reperes_nutrionnels']
+        product_obj.image_nutrient_benchmarks = product['image_reperes_nutrionnels']
         product_obj.save()
 
         for category in product['categories_product']:
