@@ -4,7 +4,6 @@ from django.test import TestCase
 from django.urls import reverse
 
 from product.models import Product, Category
-from user.models import Profile
 
 
 class TestViews(TestCase):
@@ -26,38 +25,38 @@ class TestViews(TestCase):
         add_category_4 = Category.objects.create(name='Test_2')
 
         add_product_1 = Product.objects.create(name="Pizza test",
-                                    image_product="https://image.fr",
-                                    stores="OpenClassrooms",
-                                    url=None,
-                                    nutriscore="D",
-                                    image_reperes_nutrionnels="https://image_repere.fr")
+                                               image_product="https://image.fr",
+                                               stores="OpenClassrooms",
+                                               url=None,
+                                               nutriscore="D",
+                                               image_nutrient_benchmarks="https://image_repere.fr")
         add_product_1.save()
         add_product_1.category.add(add_category_1, add_category_3)
 
         add_product_2 = Product.objects.create(name="Pizza fromage",
-                                    image_product="https://image.fr",
-                                    stores="OpenClassrooms",
-                                    url='https://masuperpizza.fr',
-                                    nutriscore="C",
-                                    image_reperes_nutrionnels="https://image_repere.fr")
+                                               image_product="https://image.fr",
+                                               stores="OpenClassrooms",
+                                               url='https://masuperpizza.fr',
+                                               nutriscore="C",
+                                               image_nutrient_benchmarks="https://image_repere.fr")
 
         add_product_2.category.add(add_category_1, add_category_2, add_category_3)
 
         add_product_3 = Product.objects.create(name="Pizza fromage meilleur",
-                                    image_product="https://image.fr",
-                                    stores="OpenClassrooms",
-                                    url='https://masuperpizza.fr',
-                                    nutriscore="A",
-                                    image_reperes_nutrionnels="https://image_repere.fr")
+                                               image_product="https://image.fr",
+                                               stores="OpenClassrooms",
+                                               url='https://masuperpizza.fr',
+                                               nutriscore="A",
+                                               image_nutrient_benchmarks="https://image_repere.fr")
 
         add_product_3.category.add(add_category_1, add_category_2, add_category_4)
 
         add_product_4 = Product.objects.create(name="Pizza 5 fromage",
-                                    image_product="https://image.fr",
-                                    stores="OpenClassrooms",
-                                    url='https://masuperpizza.fr',
-                                    nutriscore="A",
-                                    image_reperes_nutrionnels="https://image_repere.fr")
+                                               image_product="https://image.fr",
+                                               stores="OpenClassrooms",
+                                               url='https://masuperpizza.fr',
+                                               nutriscore="A",
+                                               image_nutrient_benchmarks="https://image_repere.fr")
         add_product_4.category.add(add_category_1, add_category_2, add_category_4)
 
     def test_index(self):

@@ -25,7 +25,7 @@ class TestProductApp(TestCase):
                                                stores="OpenClassrooms",
                                                url=None,
                                                nutriscore="D",
-                                               image_reperes_nutrionnels="https://image_repere.fr")
+                                               image_nutrient_benchmarks="https://image_repere.fr")
         add_product_1.save()
         add_product_1.category.add(add_category_1, add_category_3)
 
@@ -34,7 +34,7 @@ class TestProductApp(TestCase):
                                                stores="OpenClassrooms",
                                                url='https://masuperpizza.fr',
                                                nutriscore="C",
-                                               image_reperes_nutrionnels="https://image_repere.fr")
+                                               image_nutrient_benchmarks="https://image_repere.fr")
 
         add_product_2.category.add(add_category_1, add_category_2, add_category_3)
 
@@ -43,7 +43,7 @@ class TestProductApp(TestCase):
                                                stores="OpenClassrooms",
                                                url='https://masuperpizza.fr',
                                                nutriscore="A",
-                                               image_reperes_nutrionnels="https://image_repere.fr")
+                                               image_nutrient_benchmarks="https://image_repere.fr")
 
         add_product_3.category.add(add_category_1, add_category_2, add_category_4)
 
@@ -52,7 +52,7 @@ class TestProductApp(TestCase):
                                                stores="OpenClassrooms",
                                                url='https://masuperpizza.fr',
                                                nutriscore="A",
-                                               image_reperes_nutrionnels="https://image_repere.fr")
+                                               image_nutrient_benchmarks="https://image_repere.fr")
         add_product_4.category.add(add_category_1, add_category_2, add_category_4)
 
     def test_insert_data_in_db(self):
