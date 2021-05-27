@@ -1,7 +1,7 @@
 # GrandPy Bot (Chatbot)
 
 
-[![Generic badge](https://img.shields.io/badge/<Pur_Beurre>-<0.1>-<065535>.svg)]()
+[![Generic badge](https://img.shields.io/badge/Pur_Beurre-0.1-<065535>.svg)]()
 [![version-python](https://img.shields.io/static/v1?label=Python&message=3.7&color=065535)]()
 [![made-with-python](https://img.shields.io/badge/Made%20with-Django-1f425f.svg)]()
 [![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/releases/)
@@ -32,19 +32,27 @@ pip install -r requirements.txt
 
 Création des variables d'environnment:
 ```
-
-ENV = if product, ENV = PRODUCTION
+ENV = if product, ENV = PRODUCTION (for github CI, ENV=GITHUB)
 DB_PWSD= password ur database (dev only)
 SECRET_KEY = SECRET_KEY for Django App (only prod)
 LIST_CATEGORIES = pizzas, fromages
-
 ```
 
+--------------
+# Tests Selenium
+
+Lancement des tests avec Selenium:
+```
+- run django app
+- telecharger geckodriver: https://github.com/mozilla/geckodriver/releases
+- run test selenium
+```
 
 --------------
 # Manage command
 
 manage.py insert_data_api -> recover data in api and insert into table 
+
 manage.py delete_all_data_in_table -> Delete all data in table database
 
 --------------

@@ -2,8 +2,8 @@
     {% load static %}
 
 
-{#    {% if request.get_full_path == "/index/" or request.get_full_path == "/legal/" or request.get_full_path == "/" %}#}
-{#        <header class="masthead sidebar">#}
+    {#    {% if request.get_full_path == "/index/" or request.get_full_path == "/legal/" or request.get_full_path == "/" %}#}
+    {#        <header class="masthead sidebar">#}
     {% if request.get_full_path == "/accounts/dashboard/" and image %}
         <header class="masthead masthead_product sidebar"
                 style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url(data:;base64,{{ image }});">
@@ -27,6 +27,24 @@
                 {{ header.h4 }}
             </h4>
         </div>
+        {% if request.get_full_path == "/" or request.get_full_path == "/index/" %}
+{#            <form class="mr-auto mt-2 mt-lg-0" action="{% url 'results' %}" method="post">#}
+{#                {% csrf_token %}#}
+{#                {{ form }}#}
+{#            </form>#}
+            <form class="input-group mb-3" action="{% url 'results' %}" method="post">
+                {% csrf_token %}
+                <label for="product"></label><input type="text"
+                                                    class="form-control search-product"
+                                                    placeholder="Produit"
+                                                    name="product"
+                                                    id="product">
+
+                    <button type="submit" class="input-group-text btn-search-product btn btn-xl"
+                          id="basic-addon2">Chercher
+                    </button>
+            </form>
+        {% endif %}
     </div>
 </div>
 </header>

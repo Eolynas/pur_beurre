@@ -40,7 +40,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <p class="desktop_nav nav-link js-scroll-trigger"> Bonjour {{ user.first_name }}</p>
+{#                        {% if user.first_name %}#}
+                        <p class="desktop_nav nav-link js-scroll-trigger"> Bonjour {{ user.first_name|default:user.username }}</p>
+{#                        {% else %}#}
+{#                        <p class="desktop_nav nav-link js-scroll-trigger"> Bonjour {{ user.first_name  }}</p> #}
+{#                        {% endif %}#}
                     </li>
                     {% else %}
                     <li class="nav-item">
