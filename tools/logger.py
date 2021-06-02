@@ -1,8 +1,9 @@
 """read logger.yaml for logging the program"""
-import os
-import yaml
-import logging.config
 import logging
+import logging.config
+import os
+
+import yaml
 
 
 def setup_logging(

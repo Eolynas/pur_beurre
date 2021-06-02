@@ -20,13 +20,13 @@
             <!-- Login Form -->
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <p>{{ form.username }}</p>
-                <p>{{ form.first_name }}</p>
-                <p>{{ form.last_name }}</p>
-                <p>{{ form.email }}</p>
-                <p>{{ form.image }}</p>
-                <p>{{ form.password1 }}</p>
-                <p>{{ form.password2 }}</p>
+                {{ form.username }}
+                {{ form.first_name }}
+                {{ form.last_name }}
+                {{ form.email }}
+                {{ form.image }}
+                {{ form.password1 }}
+                {{ form.password2 }}
                 <div>
                     {{ form.errors  }}
                     {{ info }}

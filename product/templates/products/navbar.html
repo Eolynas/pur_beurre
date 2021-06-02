@@ -20,24 +20,44 @@
                 </form>
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'myproduct' %}"><i class="fas fa-thumbs-up"></i></a>
+                        <a class="nav-link" href="{% url 'myproduct' %}">
+                            <i class="desktop_nav fas fa-thumbs-up"></i>
+                            <p class="mobile_nav">Mes produits</p>
+                        </a>
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'dashboardUser' %}">
-                            <img class="icon_account" src="{% static 'product/img/noun_Carrot_29691.svg' %}">
+                            <img class="icon_account desktop_nav" src="{% static 'product/img/noun_Carrot_29691.svg' %}">
+                            <p class="mobile_nav">Mon compte</p>
                         </a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i></a>
+                        <a class="nav-link" href="{% url 'logout' %}">
+                            <i class="desktop_nav fas fa-sign-out-alt"></i>
+                            <p class="mobile_nav">Deconnexion</p>
+                        </a>
                     </li>
-                    <li class="nav-item"><a class="nav-link js-scroll-trigger"> Bonjour {{ user.first_name }}</a></li>
+                    <li class="nav-item">
+{#                        {% if user.first_name %}#}
+                        <p class="desktop_nav nav-link js-scroll-trigger"> Bonjour {{ user.first_name|default:user.username }}</p>
+{#                        {% else %}#}
+{#                        <p class="desktop_nav nav-link js-scroll-trigger"> Bonjour {{ user.first_name  }}</p> #}
+{#                        {% endif %}#}
+                    </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i></a>
+                        <a class="nav-link" href="{% url 'login' %}">
+                            <i class="desktop_nav fas fa-sign-in-alt"></i>
+                            <p class="mobile_nav">Connexion</p>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-plus"></i></a>
+                        <a class="nav-link" href="{% url 'register' %}">
+                            <i class="desktop_nav fas fa-user-plus"></i>
+                            <p class="mobile_nav">Inscription</p>
+                        </a>
                     </li>
                     {% endif %}
                 </ul>

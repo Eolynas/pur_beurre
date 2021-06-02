@@ -1,207 +1,177 @@
 """ All view Product app"""
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, HttpResponseNotFound, Http404
-from django.shortcuts import render
-from django.template import loader
-from django.views import generic, View
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.http import JsonResponse
+from django.views import View, generic
 
-from .forms import SearchProduct, RegisterUserForm, SearchProductNavBar
-from product.models import get_id_product_by_name, get_product_by_id, get_subsitut_for_product, get_all_name_products, save_product_for_user, get_product_save_user
+from product.forms import SearchProduct, SearchProductNavBar
+from product.models import (
+    get_product_by_id,
+    get_product_save_user,
+    get_subsitut_for_product,
+    save_product_for_user,
+)
 
 
 class Index(View):
     """
     Page index url/ or url/index
     """
-    template_name = 'products/index.html'
+
+    template_name = "products/index.html"
     form_class = SearchProduct
     form_navbar = SearchProductNavBar
 
     def get(self, request):
+        """
+        get in home page
+        """
 
-        return render(request, self.template_name, {'form': self.form_class, 'form_navbar': self.form_navbar})
+        header = {
+            "h1": "Du gras oui, mais de qualité",
+            "h4": "Trouvez un produit de substitution pour ceux que vous consommez tous les jours",
+        }
+        return render(
+            request,
+            self.template_name,
+            {
+                "form": self.form_class,
+                "form_navbar": self.form_navbar,
+                "header": header,
+            },
+        )
 
 
-class Legal(generic.TemplateView):
+class Legal(View):
     """
     Page mention legal url/legal
     """
-    template_name = 'products/mention_legale.html'
+
+    template_name = "products/mention_legale.html"
+    form_navbar = SearchProductNavBar
+
+    def get(self, request):
+        """
+        get in legal page
+        """
+        header = {"h1": "Mentions légales"}
+        return render(
+            request,
+            self.template_name,
+            {"header": header, "form_navbar": self.form_navbar},
+        )
 
 
 class ProductInfo(generic.TemplateView):
     """
     Page product url/product/<id>
     """
-    template_name = 'products/product.html'
 
-    def get_context_data(self, *args, **kwargs):
-        product = get_product_by_id(kwargs['id_product'])
+    template_name = "products/product.html"
+
+    def get(self, request, **kwargs):
+        """
+        get in product page
+        """
+        product = get_product_by_id(kwargs["id_product"])
+        form_navbar = SearchProductNavBar
         if product:
-            context = super(ProductInfo, self).get_context_data(*args, **kwargs)
-            context['name'] = product.name
-            context['image_product'] = product.image_product
-            context['stores'] = product.stores
-            context['url'] = product.url
-            context['nutriscore'] = product.nutriscore
-            context['image_reperes_nutrionnels'] = product.image_reperes_nutrionnels
-            return context
+            header = {
+                "h1": "Du gras oui, mais de qualité",
+                "h4": "Trouvez un produit de substitution pour ceux que vous consommez tous les jours",
+            }
+            return render(
+                request,
+                self.template_name,
+                {"header": header, "product": product, "form_navbar": form_navbar},
+            )
+        header = {"h1": "Produit non trouvé"}
+        return render(
+            request, self.template_name, {"header": header, "form_navbar": form_navbar}
+        )
 
 
-class Result(generic.FormView, generic.TemplateView):
+class Result(generic.TemplateView):
     """
     view for url after research
     """
-    template_name = 'products/result.html'
+
+    template_name = "products/result.html"
     substitute_products = {}
     form_class = SearchProduct
 
     def post(self, request, *args, **kwargs):
+        """
+        post in result page
+        """
         form = self.form_class(request.POST)
         substitute_products = {}
         if form.is_valid():
             form_navbar = SearchProductNavBar
             result_form = form.print_form()
-            result = get_subsitut_for_product(result_form['product'])
+            result = get_subsitut_for_product(result_form["product"])
             if result is False:
+                header = {
+                    "h1": f"le produit {result_form['product']} n'est pas présent dans notre base de donnée"
+                }
                 info_product = f"le produit {result_form['product']} n'est pas présent dans notre base de donnée"
-                return render(request, self.template_name, {'info': "Aucun produit trouvé",
-                                                            'product_not_found': info_product,
-                                                            'form_navbar': form_navbar})
-            substitute_products['initial_product'] = result[0]
-            substitute_products['substitut_products'] = result[1]
-            substitute_products['product_save_for_user'] = None
+                return render(
+                    request,
+                    self.template_name,
+                    {
+                        "header": header,
+                        "title": "produit non trouvé",
+                        "product_not_found": info_product,
+                        "form_navbar": form_navbar,
+                    },
+                )
+            substitute_products["initial_product"] = result[0]
+            substitute_products["substitut_products"] = result[1]
+            substitute_products["product_save_for_user"] = None
             if request.user.is_authenticated:
-                substitute_products['product_save_for_user'] = get_product_save_user(request.user)
+                substitute_products["product_save_for_user"] = get_product_save_user(
+                    request.user
+                )
 
-            return render(request, self.template_name, {'initial_product': substitute_products['initial_product'],
-                                                        'substitut_products': substitute_products['substitut_products'],
-                                                        'product_save_for_user': substitute_products['product_save_for_user'],
-                                                        'form_navbar': form_navbar})
-
-
-class RegisterUser(generic.TemplateView):
-    """
-    page signUP
-    """
-
-    template_name = 'products/register.html'
-
-    def post(self, request, *args, **kwargs):
-        form = RegisterUserForm(request.POST, request.FILES)
-        if form.is_valid():
-
-            user = form.save(request)
-            # profile = profile_form.save(commit = False)
-            # profile.user = user
-            # profile.save(request)
-            if user is False:
-                info = "Erreur lors de l'upload de l'image"
-                return render(request, self.template_name, {'form': form, 'info': info})
-            else:
-                login(request, user)
-            return HttpResponseRedirect('/index')
-        else:
-            return render(request, self.template_name, {'form': form})
-
-    def get(self, request, *args, **kwargs):
-        form = RegisterUserForm()
-        return render(request, self.template_name, {'form': form})
-
-
-class LoginView(generic.TemplateView):
-    """
-    page signIn
-    """
-
-    template_name = 'products/login.html'
-
-    def get(self, request, *args, **kwargs):
-        form = AuthenticationForm()
-        return render(request, self.template_name, context={"form": form})
-
-    def post(self, request, **kwargs):
-        form = AuthenticationForm(request, request.POST)
-        if form.is_valid():
-            username = request.POST.get('username', False)
-            password = request.POST.get('password', False)
-            user = authenticate(username=username, password=password)
-
-            if user is not None:
-                login(request, user)
-                return HttpResponseRedirect('/')
-
-        return render(request, self.template_name, context={"form": form})
-
-
-class LogoutView(generic.RedirectView):
-    """
-    A view that logout user and redirect to homepage.
-    """
-
-    def get(self, request, *args, **kwargs):
-        logout(request)
-        return HttpResponseRedirect('/')
-
-
-class DashboardUser(generic.TemplateView):
-    """
-    page my accompte
-    """
-
-    template_name = 'products/dashboardUser.html'
-
-    @method_decorator(login_required)
-    def get(self, request, *args, **kwargs):
-        user = {}
-        user['user'] = request.user
-        # user_product_save = {}
-        # user_product_save['result'] = get_product_save_user(request.user)
-        # user_product_save['user'] = request.user
-        # # return super().dispatch(*args, **kwargs)
-        return render(request, self.template_name, user)
+            header = {"h1": result[0].name}
+            return render(
+                request,
+                self.template_name,
+                {
+                    "initial_product": substitute_products["initial_product"],
+                    "header": header,
+                    "title": result[0].name,
+                    "substitut_products": substitute_products["substitut_products"],
+                    "product_save_for_user": substitute_products[
+                        "product_save_for_user"
+                    ],
+                    "form_navbar": form_navbar,
+                },
+            )
 
 
 class SaveProduct(View):
     """
     save product by user
     """
-    # template_name = 'products/dashboardUser.html'
 
-    @method_decorator(login_required(login_url='/accounts/login/'))
+    @method_decorator(login_required(login_url="/accounts/login/"))
     def dispatch(self, request, *args, **kwargs):
+        """
+        post in login page
+        """
 
-        product_id = request.POST['product_id']
+        product_id = request.POST["product_id"]
 
         result = save_product_for_user(product_id, user=request.user)
         if not result:
-            raise Http404("Une erreur s'est produite lors de la sauvegarde de votre produit")
+            raise Http404(
+                "Une erreur s'est produite lors de la sauvegarde de votre produit"
+            )
         print(result)
-        return HttpResponseRedirect('/accounts/products/')
+        return HttpResponseRedirect("/accounts/products/")
 
-
-class MyProducts(generic.TemplateView):
-    """
-    view for save products by user
-    """
-    template_name = 'products/result.html'
-
-    @method_decorator(login_required(login_url='/accounts/login/'))
-    def get(self, request, *args, **kwargs):
-        form_navbar = SearchProductNavBar
-        save_product_by_user = get_product_save_user(request.user)
-        # product_id = request.POST['product_id']
-        # result = save_product_for_user(product_id, user=request.user)
-        # print(result)
-
-        return render(request, self.template_name, {'substitut_products': save_product_by_user,
-                                                    'myproduct': True,
-                                                    'user': request.user,
-                                                    'form_navbar': form_navbar})
 
 # class AllProducts(generic.View):
 #     """

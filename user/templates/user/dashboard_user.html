@@ -1,0 +1,24 @@
+{% extends 'products/base.html' %}
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+{% include 'products/header.html' %}
+
+<section class="page-section">
+    <div class="container">
+        <p class="text-center mt-0">Email</p>
+        <hr class="divider my-4"/>
+        <h2 class="text-center mt-0">
+            {{ user.email }}
+        </h2>
+{#        <img src="data:;base64,{{ image }}">#}
+
+    </div>
+
+
+</section>
+
+
+
+
+{% endblock %}

@@ -2,17 +2,17 @@
     {% load static %}
 
 
-    {% if request.get_full_path == "/index/" or request.get_full_path == "/legal/" %}
-        <header class="masthead sidebar indextoto">
-    {% elif request.get_full_path == "/accounts/dashboard/" and user.profile.image %}
+    {#    {% if request.get_full_path == "/index/" or request.get_full_path == "/legal/" or request.get_full_path == "/" %}#}
+    {#        <header class="masthead sidebar">#}
+    {% if request.get_full_path == "/accounts/dashboard/" and image %}
         <header class="masthead masthead_product sidebar"
-                style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url({{ user.profile.image.url }});">
+                style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url(data:;base64,{{ image }});">
 
     {% elif request.get_full_path == "/results/" and initial_product.image_product %}
         <header class="masthead masthead_product sidebar"
                 style="background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url({{ initial_product.image_product }});">
     {% else %}
-        <header class="masthead sidebar indextosdsdsdto">
+        <header class="masthead sidebar">
     {% endif %}
 
 <div class="container h-100">
@@ -20,29 +20,31 @@
 
         <div class="col-lg-10">
             <h1 class="text-uppercase text-white font-weight-bold">
-                {% if request.get_full_path == "/index/" %}
-                    Du gras oui, mais de qualité
-                {% elif request.get_full_path == "/legal/" %}
-                    Mentions Légales
-                {% elif request.get_full_path == "/accounts/dashboard/" %}
-                    Bonjour {{ user.first_name }}
-                {% elif request.get_full_path == "/results/" and initial_product %}
-                    {{ initial_product.name }}
-                {% elif request.get_full_path == "/results/" and info %}
-                    {{ info }}
-                {% elif request.get_full_path == "/accounts/products/" %}
-                    Bonjour {{ user.first_name }}
-                {% endif %}
+                {{ header.h1 }}
             </h1>
             <hr class="divider my-4"/>
             <h4 class="text-white-75 font-weight-light mb-5">
-                {% if request.get_full_path == "/index/" %}
-                    Trouvez un produit de substitution pour ceux que vous consommez tous les jours
-                {% elif request.get_full_path == "/accounts/products/" %}
-                    Voici vos produits sauvegardé
-                {% endif %}
+                {{ header.h4 }}
             </h4>
         </div>
+        {% if request.get_full_path == "/" or request.get_full_path == "/index/" %}
+{#            <form class="mr-auto mt-2 mt-lg-0" action="{% url 'results' %}" method="post">#}
+{#                {% csrf_token %}#}
+{#                {{ form }}#}
+{#            </form>#}
+            <form class="input-group mb-3" action="{% url 'results' %}" method="post">
+                {% csrf_token %}
+                <label for="product"></label><input type="text"
+                                                    class="form-control search-product"
+                                                    placeholder="Produit"
+                                                    name="product"
+                                                    id="product">
+
+                    <button type="submit" class="input-group-text btn-search-product btn btn-xl"
+                          id="basic-addon2">Chercher
+                    </button>
+            </form>
+        {% endif %}
     </div>
 </div>
 </header>

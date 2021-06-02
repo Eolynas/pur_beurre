@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('product', '0006_auto_20210425_1807'),
+        ("product", "0006_auto_20210425_1807"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='profile',
-            name='name_animals',
+            model_name="profile",
+            name="name_animals",
         ),
         migrations.AddField(
-            model_name='profile',
-            name='image',
-            field=models.FileField(null=True, upload_to=''),
+            model_name="profile",
+            name="image",
+            field=models.FileField(null=True, upload_to=""),
         ),
     ]
