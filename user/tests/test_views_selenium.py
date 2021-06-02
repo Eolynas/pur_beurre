@@ -25,11 +25,11 @@ class MySeleniumTests(StaticLiveServerTestCase):
         test login views with selenium
         """
         print(User.objects.get(username='TestUser'))
-        self.selenium.get("http://127.0.0.1:8000/accounts/login/")
+        self.selenium.get(f"{self.live_server_url}/accounts/login/")
         self.selenium.find_element_by_id('id_username').send_keys("TestUser")
         self.selenium.find_element_by_id('id_password').send_keys("Testpassword!")
         time.sleep(2)
         self.selenium.find_element_by_id('submit_login').click()
 
-        index_url = "http://127.0.0.1:8000/"
+        index_url = f"{self.live_server_url}/"
         assert self.selenium.current_url == index_url

@@ -28,7 +28,7 @@ jobs:
           pip install -r requirements.txt
       - name: Run Tests
         run: |
-          python manage.py test product --exclude-tag=selenium
+          python manage.py test product
 
         env:
           ENV: GITHUB
