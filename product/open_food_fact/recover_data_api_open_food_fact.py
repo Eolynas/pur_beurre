@@ -3,7 +3,6 @@ import sys
 import requests
 
 from tools import logger
-import os
 
 
 class RecoverApi:
@@ -21,38 +20,48 @@ class RecoverApi:
             page = 1
             list_list_product = []
             while True:
-                query = requests.get(f'https://fr.openfoodfacts.org/category/{category}.json?page={page}').json()
-                if int(query['count']) == 0:
-                    logger.info(f"Aucune données dans l'API pour la catégory {category}")
+                query = requests.get(
+                    f"https://fr.openfoodfacts.org/category/{category}.json?page={page}"
+                ).json()
+                if int(query["count"]) == 0:
+                    logger.info(
+                        f"Aucune données dans l'API pour la catégory {category}"
+                    )
                     return list_list_product
 
-                for product in query['products']:
+                for product in query["products"]:
                     product_list = {}
-                    if product.get("product_name_fr") and \
-                            product.get("image_url") and \
-                            product.get("stores") and \
-                            product.get("url") and \
-                            product.get("nutriscore_grade") and \
-                            product.get("image_nutrition_url") and \
-                            product.get("categories"):
-                        product_list['name'] = product.get("product_name_fr").strip()
+                    if (
+                            product.get("product_name_fr")
+                            and product.get("image_url")
+                            and product.get("stores")
+                            and product.get("url")
+                            and product.get("nutriscore_grade")
+                            and product.get("image_nutrition_url")
+                            and product.get("categories")
+                    ):
+                        product_list["name"] = product.get("product_name_fr").strip()
 
-                        product_list['image_product'] = product.get("image_url")
+                        product_list["image_product"] = product.get("image_url")
 
-                        product_list['stores'] = product.get("stores", '').strip()
+                        product_list["stores"] = product.get("stores", "").strip()
 
-                        product_list['url'] = product.get("url", '').strip()
+                        product_list["url"] = product.get("url", "").strip()
 
-                        product_list['nutriscore'] = product.get("nutriscore_grade")
+                        product_list["nutriscore"] = product.get("nutriscore_grade")
 
-                        product_list['image_reperes_nutrionnels'] = product.get("image_nutrition_url")
+                        product_list["image_reperes_nutrionnels"] = product.get(
+                            "image_nutrition_url"
+                        )
 
-                        product_list['categories_product'] = product.get("categories", "").split(",")
+                        product_list["categories_product"] = product.get(
+                            "categories", ""
+                        ).split(",")
 
                         list_list_product.append(product_list)
                 page += 1
 
-                if query['page_count'] == page:
+                if query["page_count"] == page:
                     return list_list_product
 
         except AttributeError as e:

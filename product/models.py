@@ -1,9 +1,9 @@
 """ Models postgres"""
-from typing import Union, Tuple
+from typing import Tuple, Union
 
 from django.contrib.auth.models import User
 from django.db import models
-from user.models import Profile
+
 from tools import logger
 
 
@@ -11,6 +11,7 @@ class Category(models.Model):
     """
     models category for product
     """
+
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
 
@@ -19,14 +20,15 @@ class Product(models.Model):
     """
     models product
     """
+
     name = models.CharField(max_length=200, unique=True)
     image_product = models.CharField(max_length=255, null=True)
     stores = models.CharField(max_length=200, null=True)
     url = models.CharField(max_length=255, null=True)
     nutriscore = models.CharField(max_length=20, null=True)
     image_nutrient_benchmarks = models.CharField(max_length=255, null=True)
-    category = models.ManyToManyField(Category, related_name='products')
-    user_save = models.ManyToManyField(User, related_name='user_save_products')
+    category = models.ManyToManyField(Category, related_name="products")
+    user_save = models.ManyToManyField(User, related_name="user_save_products")
 
 
 def delete_all_data_in_tables():
@@ -48,29 +50,29 @@ def bulk_insert_product_category(list_product: list):
     for product in list_product:
 
         product_obj, created = Product.objects.get_or_create(
-            name=product['name'],
+            name=product["name"],
         )
         if created:
             number_product_insert += 1
-        if not product_obj.image_product == product['image_product'] and \
-                not product_obj.stores == product['stores'] and \
-                not product_obj.url == product['url'] and \
-                not product_obj.nutriscore == product['nutriscore'] and \
-                not product_obj.image_nutrient_benchmarks == product['image_reperes_nutrionnels']:
+        if (
+                not product_obj.image_product == product["image_product"]
+                and not product_obj.stores == product["stores"]
+                and not product_obj.url == product["url"]
+                and not product_obj.nutriscore == product["nutriscore"]
+                and not product_obj.image_nutrient_benchmarks == product["image_reperes_nutrionnels"]
+        ):
             number_product_update += 1
 
-        product_obj.image_product = product['image_product']
-        product_obj.stores = product['stores']
-        product_obj.url = product['url']
-        product_obj.nutriscore = product['nutriscore']
-        product_obj.image_nutrient_benchmarks = product['image_reperes_nutrionnels']
+        product_obj.image_product = product["image_product"]
+        product_obj.stores = product["stores"]
+        product_obj.url = product["url"]
+        product_obj.nutriscore = product["nutriscore"]
+        product_obj.image_nutrient_benchmarks = product["image_reperes_nutrionnels"]
         product_obj.save()
 
-        for category in product['categories_product']:
+        for category in product["categories_product"]:
             categories_obj = []
-            obj, _ = Category.objects.get_or_create(
-                name=category
-            )
+            obj, _ = Category.objects.get_or_create(name=category)
             categories_obj.append(obj)
             product_obj.category.add(obj)
 
@@ -108,9 +110,12 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
         list_product_by_category = []
         products = category.products.all()
         for product in products:
-            if not product in substitute_products \
-                    and product.nutriscore.lower() <= product_initial_info.nutriscore.lower() \
-                    and not product.name == product_initial_info.name:
+            if (
+                    product not in substitute_products
+                    and product.nutriscore.lower()
+                    <= product_initial_info.nutriscore.lower()
+                    and not product.name == product_initial_info.name
+            ):
                 list_product_by_category.append(product)
                 substitute_products.append(product)
 

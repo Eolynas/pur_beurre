@@ -11,27 +11,55 @@ class RegisterUserForm(UserCreationForm):
     """
     form for signup new users
     """
-    username = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Pseudo',
-                                                                            'class': 'fadeIn first'}))
-    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Email',
-                                                                          'class': 'fadeIn second'}))
-    first_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'Prénom',
-                                                                               'class': 'fadeIn third'}))
-    last_name = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'noms',
-                                                                              'class': 'fadeIn second'}))
 
-    image = forms.ImageField(required=True, widget=forms.FileInput(attrs={'class': 'image_form'}))
+    username = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={"placeholder": "Pseudo", "class": "fadeIn first"}
+        ),
+    )
+    email = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={"placeholder": "Email", "class": "fadeIn second"}
+        ),
+    )
+    first_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={"placeholder": "Prénom", "class": "fadeIn third"}
+        ),
+    )
+    last_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={"placeholder": "noms", "class": "fadeIn second"}),
+    )
 
-    password1 = forms.CharField(required=True, widget=forms.PasswordInput(attrs={'placeholder': 'Mot de passe',
-                                                                                 'class': 'fadeIn fourth'}))
-    password2 = forms.CharField(required=True, widget=forms.PasswordInput(
-        attrs={'placeholder': 'saisissez de nouveau votre mot de passe',
-               'class': 'fadeIn fourth'}))
+    image = forms.ImageField(
+        required=True, widget=forms.FileInput(attrs={"class": "image_form"})
+    )
+
+    password1 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={"placeholder": "Mot de passe", "class": "fadeIn fourth"}
+        ),
+    )
+    password2 = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "saisissez de nouveau votre mot de passe",
+                "class": "fadeIn fourth",
+            }
+        ),
+    )
 
     class Meta:
         """
         Class meta
         """
+
         model = User
         fields = ("username", "first_name", "last_name", "email", "image", "password1")
 
@@ -50,14 +78,14 @@ class RegisterUserForm(UserCreationForm):
                 profile = Profile(user=user)
                 profile.image = self.cleaned_data["image"].file.read()
                 profile.save()
-            except:
+            except IOError:
                 user.delete()
                 return False
 
         return user
 
     def clean_image(self):
-        image = self.cleaned_data.get('image', False)
+        image = self.cleaned_data.get("image", False)
         if image:
             if image.size / 1000000 > 2:
                 raise ValidationError("Image trop large (>2mb)")

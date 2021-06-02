@@ -7,28 +7,38 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=200)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=200)),
             ],
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, unique=True)),
-                ('image_product', models.CharField(max_length=255, null=True)),
-                ('stores', models.CharField(max_length=200, null=True)),
-                ('url', models.CharField(max_length=255, null=True)),
-                ('nutriscore', models.CharField(max_length=20, null=True)),
-                ('image_reperes_nutrionnels', models.CharField(max_length=255, null=True)),
-                ('category', models.ManyToManyField(to='product.Category')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=200, unique=True)),
+                ("image_product", models.CharField(max_length=255, null=True)),
+                ("stores", models.CharField(max_length=200, null=True)),
+                ("url", models.CharField(max_length=255, null=True)),
+                ("nutriscore", models.CharField(max_length=20, null=True)),
+                (
+                    "image_reperes_nutrionnels",
+                    models.CharField(max_length=255, null=True),
+                ),
+                ("category", models.ManyToManyField(to="product.Category")),
             ],
         ),
     ]
