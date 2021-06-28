@@ -35,7 +35,7 @@ Création des variables d'environnement:
 ENV = PRODUCTION -> for production (heroku)
 ENV = GITHUB -> Only for action in github (for unit test)
 
-DB_PWSD= password ur database (dev only)
+DB_PWSD= password database (dev only)
 SECRET_KEY = SECRET_KEY for Django App (only prod)
 LIST_CATEGORIES = pizzas, fromages
 ```
