@@ -31,4 +31,4 @@ jobs:
           python manage.py test product
 
         env:
-          ENV: GITHUB
+          ENV: GITHUB,DJANGO_SETTINGS_MODULE='settings'
