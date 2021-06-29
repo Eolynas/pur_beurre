@@ -31,4 +31,5 @@ jobs:
           python manage.py test product
 
         env:
-          ENV: GITHUB;DJANGO_SETTINGS_MODULE='settings'
+          ENV: GITHUB
+          DJANGO_SETTINGS_MODULE: settings.pur_beurre
