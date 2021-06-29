@@ -28,12 +28,12 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# if os.environ.get("ENV") == "PRODUCTION":
-#     DEBUG = False
-#     ALLOWED_HOSTS = ["pur-beurre-oc-eh.herokuapp.com"]
-# else:
-DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1"]
+if os.environ.get("ENV") == "PRODUCTION":
+    DEBUG = False
+    ALLOWED_HOSTS = ["pur-beurre-oc-eh.herokuapp.com"]
+else:
+    DEBUG = True
+    ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 CSRF_COOKIE_SECURE = False
