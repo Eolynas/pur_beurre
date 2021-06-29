@@ -32,4 +32,4 @@ jobs:
 
         env:
           ENV: GITHUB
-          DJANGO_SETTINGS_MODULE: pur_beurre.settings
+          DJANGO_SETTINGS_MODULE: settings
