@@ -159,17 +159,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 LOGIN_REDIRECT_URL = "index"
 # AUTH_PROFILE_MODULE = 'product.Profile'
 
-# if os.environ.get("ENV") == "PRODUCTION":
-#
-#     # Static files settings
-#     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-#
-#     STATIC_ROOT = os.path.join(PROJECT_ROOT, "staticfiles")
-#
-#     # Extra places for collectstatic to find static files.
-#     STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"),)
-#     db_from_env = dj_database_url.config(conn_max_age=500)
-#     DATABASES["default"].update(db_from_env)
-#     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+if os.environ.get("ENV") == "HEROKU":
+
+    # Static files settings
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, "staticfiles")
+
+    # Extra places for collectstatic to find static files.
+    STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"),)
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES["default"].update(db_from_env)
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 _locale._getdefaultlocale = lambda *args: ["fr", "utf8"]
