@@ -7,7 +7,7 @@ import yaml
 
 
 def setup_logging(
-    default_path="logger.yaml", default_level=logging.INFO, env_key="osmose"
+    default_path="tools/logger.yaml", default_level=logging.INFO, env_key="pur_beurre"
 ):
     """
     init logger
