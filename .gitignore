@@ -20,3 +20,5 @@ media/ideebase.png
 img.png
 
 *.log
+
+tools/logger.yaml
