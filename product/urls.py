@@ -17,4 +17,5 @@ urlpatterns = [
         views.Result.as_view(extra_context={"title": "results"}),
         name="results",
     ),
+    path("list_product/", views.ListProducts.as_view(), name="list_product"),
 ]

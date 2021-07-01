@@ -55,11 +55,12 @@ def bulk_insert_product_category(list_product: list):
         if created:
             number_product_insert += 1
         if (
-                not product_obj.image_product == product["image_product"]
-                and not product_obj.stores == product["stores"]
-                and not product_obj.url == product["url"]
-                and not product_obj.nutriscore == product["nutriscore"]
-                and not product_obj.image_nutrient_benchmarks == product["image_reperes_nutrionnels"]
+            not product_obj.image_product == product["image_product"]
+            and not product_obj.stores == product["stores"]
+            and not product_obj.url == product["url"]
+            and not product_obj.nutriscore == product["nutriscore"]
+            and not product_obj.image_nutrient_benchmarks
+            == product["image_reperes_nutrionnels"]
         ):
             number_product_update += 1
 
@@ -111,10 +112,10 @@ def get_subsitut_for_product(product: str) -> Union[Tuple[str, list], bool]:
         products = category.products.all()
         for product in products:
             if (
-                    product not in substitute_products
-                    and product.nutriscore.lower()
-                    <= product_initial_info.nutriscore.lower()
-                    and not product.name == product_initial_info.name
+                product not in substitute_products
+                and product.nutriscore.lower()
+                <= product_initial_info.nutriscore.lower()
+                and not product.name == product_initial_info.name
             ):
                 list_product_by_category.append(product)
                 substitute_products.append(product)
@@ -147,6 +148,7 @@ def get_product_save_user(user):
     user_product_save = user.user_save_products.all()
 
     return user_product_save
+
 
 # def get_all_name_products():
 #     """

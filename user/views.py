@@ -4,17 +4,13 @@ from base64 import b64encode
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import (
-    HttpResponseRedirect,
-)
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views import generic
 
 from product.forms import SearchProductNavBar
-from product.models import (
-    get_product_save_user,
-)
+from product.models import get_product_save_user
 from user.forms import RegisterUserForm
 
 
@@ -110,7 +106,9 @@ class DashboardUser(generic.TemplateView):
         image = None
         header = {"h1": f"Bonjour {request.user.first_name}"}
 
-        if hasattr(request.user, "profile") and isinstance(request.user.profile.image, memoryview):
+        if hasattr(request.user, "profile") and isinstance(
+            request.user.profile.image, memoryview
+        ):
             image = b64encode(request.user.profile.image).decode("ascii")
 
         return render(
