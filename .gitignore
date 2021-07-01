@@ -9,9 +9,14 @@ config/config.ini
 geckodriver.log
 *.json
 *.ini
+production.py
 
 
 certificat.png
 
 
 media/ideebase.png
+
+img.png
+
+*.log

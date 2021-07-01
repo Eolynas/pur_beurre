@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get("ENV") == "PRODUCTION":
+if os.environ.get("ENV") == "HEROKU":
     DEBUG = False
     ALLOWED_HOSTS = ["pur-beurre-oc-eh.herokuapp.com"]
 else:
@@ -57,7 +57,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -159,7 +158,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 LOGIN_REDIRECT_URL = "index"
 # AUTH_PROFILE_MODULE = 'product.Profile'
 
-if os.environ.get("ENV") == "PRODUCTION":
+if os.environ.get("ENV") == "HEROKU":
 
     # Static files settings
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
