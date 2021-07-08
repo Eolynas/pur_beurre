@@ -1,6 +1,6 @@
 """ Form for product app"""
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
@@ -91,3 +91,12 @@ class RegisterUserForm(UserCreationForm):
                 raise ValidationError("Image trop large (>2mb)")
             return image
         raise ValidationError("Couldn't read uploaded image")
+
+
+class MyPasswordChangeForm(PasswordChangeForm):
+    """
+    custom form for change password
+    """
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Mot de passe actuel'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Nouveau mot de passe'}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Répétez nouveau mot de passe'}))

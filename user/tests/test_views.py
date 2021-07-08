@@ -167,3 +167,31 @@ class TestViews(TestCase):
         self.client.force_login(User.objects.get_or_create(username="bob")[0])
         response = self.client.get("/accounts/logout/")
         self.assertEqual(response.status_code, 302)
+
+    def test_changing_password(self):
+        """
+        Test logout
+        """
+        # username="bob", first_name="bob", password="toto2021"
+        self.client.force_login(User.objects.get_or_create(username="bob")[0])
+        # ----------- GET ----------- #
+        response = self.client.get("/accounts/changepassword/")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("form", str(response.content))
+        self.assertTemplateUsed(response, "user/changepassword.html")
+
+        # ----------- POST ----------- #
+
+        response = self.client.post(
+            "/accounts/changepassword/", {"old_password": "toto2021",
+                                          "new_password1": "newToto2022",
+                                          "new_password2": "newToto2022",
+                                          }, follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user/dashboard_user.html")
+
+        self.client.logout()
+        # Test login with new password
+        self.assertEqual(self.client.login(username='bob', password='toto2021'), False)
+        self.assertEqual(self.client.login(username='bob', password='newToto2022'), True)
