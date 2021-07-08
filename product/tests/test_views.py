@@ -162,3 +162,20 @@ class TestViews(TestCase):
 
         response = self.client.post("/products/save/", {"product_id": 999})
         self.assertEqual(response.status_code, 404)
+
+    def test_list_product(self):
+        """
+        Test list product (/list_product/)
+        - status_code (200, 301)
+        """
+        response = self.client.get("/list_product/")
+        self.assertEqual(response.status_code, 200)
+
+        # Check if len products is 4
+        self.assertEqual(len(response.context["products"]), 4)
+
+        # Check template used
+        self.assertTemplateUsed(response, "products/list_product.html")
+
+        response = self.client.post("/legal/")
+        self.assertEqual(response.status_code, 405)

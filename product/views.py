@@ -7,6 +7,7 @@ from django.views import View, generic
 
 from product.forms import SearchProduct, SearchProductNavBar
 from product.models import (
+    Product,
     get_product_by_id,
     get_product_save_user,
     get_subsitut_for_product,
@@ -173,20 +174,22 @@ class SaveProduct(View):
         return HttpResponseRedirect("/accounts/products/")
 
 
-# class AllProducts(generic.View):
-#     """
-#     View for all products in the form of JSON
-#     she is there to do the autocompletion
-#     /!\ /!\ NOT IMPLEMENTED FOR A FUTURE VERSION /!\ /!\
-#     """
-#
-#     def get(self, request, *args, **kwargs):
-#         data = get_all_name_products()
-#         dict_products = {}
-#         dict_products['products'] = data
-#         list_products = []
-#         for product in data:
-#             list_products.append(product['name'])
-#         dict_products['products'] = list_products
-#
-#         return JsonResponse(dict_products, safe=True)
+class ListProducts(View):
+    """
+    page for display, filter ALL product
+    """
+
+    queryset = Product.objects.all()
+    template_name = "products/list_product.html"
+
+    def get(self, request):
+        """
+        get in legal page
+        """
+        header = {"h1": "Listes des produits"}
+        queryset = Product.objects.all()
+        return render(
+            request,
+            self.template_name,
+            {"products": queryset, "header": header},
+        )

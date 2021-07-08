@@ -32,13 +32,13 @@ class RecoverApi:
                 for product in query["products"]:
                     product_list = {}
                     if (
-                            product.get("product_name_fr")
-                            and product.get("image_url")
-                            and product.get("stores")
-                            and product.get("url")
-                            and product.get("nutriscore_grade")
-                            and product.get("image_nutrition_url")
-                            and product.get("categories")
+                        product.get("product_name_fr")
+                        and product.get("image_url")
+                        and product.get("stores")
+                        and product.get("url")
+                        and product.get("nutriscore_grade")
+                        and product.get("image_nutrition_url")
+                        and product.get("categories")
                     ):
                         product_list["name"] = product.get("product_name_fr").strip()
 
