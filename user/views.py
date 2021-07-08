@@ -1,9 +1,9 @@
 """ All view User app"""
 from base64 import b64encode
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -11,7 +11,8 @@ from django.views import generic
 
 from product.forms import SearchProductNavBar
 from product.models import get_product_save_user
-from user.forms import RegisterUserForm
+from user.forms import RegisterUserForm, MyPasswordChangeForm
+from django.contrib import messages
 
 
 class RegisterUser(generic.TemplateView):
@@ -150,3 +151,41 @@ class MyProducts(generic.TemplateView):
                 "form_navbar": form_navbar,
             },
         )
+
+
+class ChangePassword(generic.TemplateView):
+    """
+    view for save products by user
+    """
+
+    template_name = "user/changepassword.html"
+
+    @method_decorator(login_required(login_url="/accounts/login/"))
+    def get(self, request, *args, **kwargs):
+        """
+        get in changing password page (before login)
+        """
+        form = MyPasswordChangeForm(request.user)
+
+        return render(request, self.template_name, context={"form": form})
+
+    def post(self, request, *args, **kwargs):
+        """
+        get in changing password page (before login)
+        """
+        form = MyPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            # This is a VERY important step!
+            update_session_auth_hash(request, user)
+            messages_pws = 'Votre mot de passe a était changé avec success'
+            return render(request, "user/dashboard_user.html", context={"message_psw": messages_pws})
+
+        else:
+            error = form.errors.as_data()
+            list_errors = []
+
+            for err in form.errors.as_data():
+                print(form.errors[err].data[0].messages[0])
+                list_errors.append(form.errors[err].data[0].messages[0])
+            return render(request, self.template_name, {"form": form, "message_error": list_errors})

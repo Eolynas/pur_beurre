@@ -4,6 +4,11 @@
 {% block content %}
 {% include 'products/header.html' %}
 
+{% if message_psw %}
+    <div class="alert alert-info text-center" role="alert">
+        {{ message_psw }}
+    </div>
+{% endif %}
 <section class="page-section">
     <div class="container">
         <p class="text-center mt-0">Email</p>
@@ -11,11 +16,11 @@
         <h2 class="text-center mt-0">
             {{ user.email }}
         </h2>
-{#        <img src="data:;base64,{{ image }}">#}
-
+        <hr class="divider my-4"/>
+        <div class="text-center">
+            <a href="{% url 'changePassword' %}" type="button" class="btn btn-primary text-center">Modifier mot de passe</a>
+        </div>
     </div>
-
-
 </section>
 
 
