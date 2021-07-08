@@ -18,4 +18,5 @@ urlpatterns = [
         name="results",
     ),
     path("list_product/", views.ListProducts.as_view(), name="list_product"),
+    path("delete_product_save/", views.DeleteProductSave.as_view(), name="delete_product_save"),
 ]

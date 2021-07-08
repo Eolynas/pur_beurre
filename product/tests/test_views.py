@@ -24,7 +24,7 @@ class TestViews(TestCase):
         add_category_3 = Category.objects.create(name="Test")
         add_category_4 = Category.objects.create(name="Test_2")
 
-        add_product_1 = Product.objects.create(
+        self.add_product_1 = Product.objects.create(
             name="Pizza test",
             image_product="https://image.fr",
             stores="OpenClassrooms",
@@ -32,8 +32,8 @@ class TestViews(TestCase):
             nutriscore="D",
             image_nutrient_benchmarks="https://image_repere.fr",
         )
-        add_product_1.save()
-        add_product_1.category.add(add_category_1, add_category_3)
+        self.add_product_1.save()
+        self.add_product_1.category.add(add_category_1, add_category_3)
 
         add_product_2 = Product.objects.create(
             name="Pizza fromage",
@@ -179,3 +179,18 @@ class TestViews(TestCase):
 
         response = self.client.post("/legal/")
         self.assertEqual(response.status_code, 405)
+
+    def test_delete_product_save_success(self):
+        """
+        Test delete product save
+        """
+        # Create 1 product save for user "bob"
+
+        self.client.force_login(User.objects.get_or_create(username="bob")[0])
+        user = User.objects.filter(username='bob').first()
+        self.add_product_1.user_save.add(user)
+
+        # Request post for delete product 1
+        response = self.client.post("/delete_product_save/", {"product_id": self.add_product_1.id})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(len(user.user_save_products.all()), 0)
