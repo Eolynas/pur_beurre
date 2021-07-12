@@ -93,6 +93,21 @@ class ProductInfo(generic.TemplateView):
             request, self.template_name, {"header": header, "form_navbar": form_navbar}
         )
 
+    @method_decorator(login_required(login_url="/accounts/login/"))
+    def post(self, request, *args, **kwargs):
+        """
+        post for delete product save
+        """
+
+        product_id = request.POST["product_id"]
+
+        result = delete_product_save(user=request.user, product_id=product_id)
+        if not result:
+            raise Http404(
+                "Une erreur s'est produite lors de la sauvegarde de votre produit"
+            )
+        return HttpResponseRedirect("/accounts/products/")
+
 
 class Result(generic.TemplateView):
     """
@@ -194,26 +209,4 @@ class ListProducts(View):
             self.template_name,
             {"products": queryset, "header": header},
         )
-
-
-class DeleteProductSave(View):
-    """
-    Delete save Product in dashboard
-    """
-
-    @method_decorator(login_required(login_url="/accounts/login/"))
-    def post(self, request, *args, **kwargs):
-        """
-        post for delete product save
-        """
-
-        product_id = request.POST["product_id"]
-
-        result = delete_product_save(user=request.user, product_id=product_id)
-        if not result:
-            raise Http404(
-                "Une erreur s'est produite lors de la sauvegarde de votre produit"
-            )
-        print(result)
-        return HttpResponseRedirect("/accounts/products/")
 
