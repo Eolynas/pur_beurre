@@ -41,11 +41,24 @@
 
                         {% elif myproduct %}
 
-                            <p class="btn-info btn-block p-2 shadow rounded-pill">
-                                Supprimé
-                                <br><span class="info_supp_product_save">Fonction non prise en charge</span>
-
-                            </p>
+{#                            <p class="btn-info btn-block p-2 shadow rounded-pill">#}
+{#                                Supprimé#}
+{#                                <br><span class="info_supp_product_save">Fonction non prise en charge</span>#}
+{##}
+{#                            </p>#}
+                            <form action="{% url "delete_product_save" %}" method="post">
+                                {% csrf_token %}
+                                <div>
+                                    <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-info btn-block p-2 shadow rounded-pill">
+                                        <i class="fas fa-trash-alt"></i>
+                                        Sauvegarder {{ product.id }}
+                                    </button>
+                                </div>
+                                <input type="hidden" id="postId" name="postId" value="34657">
+                            </form>
 
 
                         {% else %}
