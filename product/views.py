@@ -217,16 +217,3 @@ class DeleteProductSave(View):
         print(result)
         return HttpResponseRedirect("/accounts/products/")
 
-
-class ListProduct2(View):
-    template_name = "products/list_product_test.html"
-
-    def get(self, request):
-        """
-        get in legal page
-        """
-        return render(
-            request,
-            self.template_name,
-        )
-
