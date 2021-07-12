@@ -46,7 +46,8 @@
 {#                                <br><span class="info_supp_product_save">Fonction non prise en charge</span>#}
 {##}
 {#                            </p>#}
-                            <form action="{% url "delete_product_save" %}" method="post">
+{#                            <form action="{% url "delete_product_save" %}" method="post">#}
+                            <form action="{% url "products" id_product=product.id %}" method="post">
                                 {% csrf_token %}
                                 <div>
                                     <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">

@@ -15,6 +15,9 @@ class Category(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
 
 class Product(models.Model):
     """
@@ -29,6 +32,9 @@ class Product(models.Model):
     image_nutrient_benchmarks = models.CharField(max_length=255, null=True)
     category = models.ManyToManyField(Category, related_name="products")
     user_save = models.ManyToManyField(User, related_name="user_save_products")
+
+    def __str__(self):
+        return self.name
 
 
 def delete_all_data_in_tables():

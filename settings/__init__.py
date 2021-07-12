@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "fontawesome-free",
+    # "fontawesome-free",
 ]
 
 MIDDLEWARE = [
@@ -188,3 +188,4 @@ if os.environ.get("ENV") == "HEROKU":
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 _locale._getdefaultlocale = lambda *args: ["fr", "utf8"]
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
