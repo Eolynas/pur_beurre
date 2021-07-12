@@ -191,6 +191,7 @@ class TestViews(TestCase):
         self.add_product_1.user_save.add(user)
 
         # Request post for delete product 1
-        response = self.client.post("/delete_product_save/", {"product_id": self.add_product_1.id})
+        url = f"/products/{self.add_product_1.id}/"
+        response = self.client.post(url, {"product_id": self.add_product_1.id})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len(user.user_save_products.all()), 0)
