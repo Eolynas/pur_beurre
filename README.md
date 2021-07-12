@@ -1,10 +1,9 @@
-# GrandPy Bot (Chatbot)
+# Pur Beurre
 
 
-[![Generic badge](https://img.shields.io/badge/Pur_Beurre-1.0-<065535>.svg)]()
+[![Generic badge](https://img.shields.io/badge/Pur_Beurre-1.2-<065535>.svg)]()
 [![version-python](https://img.shields.io/static/v1?label=Python&message=3.7&color=065535)]()
 [![made-with-python](https://img.shields.io/badge/Made%20with-Django-1f425f.svg)]()
-[![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/releases/)
 
 
 --------------
