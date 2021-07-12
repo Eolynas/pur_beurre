@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-$(document).ready(function () {
-        $('#example').DataTable();
-    });
+$(document).ready(function() {
+    $('#ListProduct').DataTable( {
+        // searching: false
+    } );
+} );
