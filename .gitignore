@@ -20,3 +20,8 @@ media/ideebase.png
 img.png
 
 *.log
+
+install.sh
+pur_beurre/staticfiles/
+staticfiles/
+/env
